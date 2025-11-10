@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Role</title>
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Sign Up As</h2>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="role" value="donor">Donor</button>
+            <p>
+                
+            </p>
+            <button type="submit" name="role" value="ngo">NGO / Receiver</button>
+        </form>
+    </div>
+</body>
+</html>
