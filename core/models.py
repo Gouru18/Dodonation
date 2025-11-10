@@ -27,7 +27,7 @@ class Donation(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     category = models.CharField(max_length=100)
-    quantity = models.models.CharField(max_length=50)  # e.g. "3 boxes" or "5 kg"
+    quantity = models.CharField(max_length=50)  # e.g. "3 boxes" or "5 kg"
     expiry_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=255)
     image = models.ImageField(upload_to='donation_images/', null=True, blank= True)
