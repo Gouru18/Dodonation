@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Account</h2>
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Update Info</button>
+</form>
+
+<hr>
+<h3>My Donations</h3>
+<a href="{% url 'create_post' %}">Create New Post</a>
+<ul>
+  {% for post in posts %}
+    <li>
+      <b>{{ post.title }}</b> - {{ post.status }}
+      <a href="{% url 'edit_post' post.id %}">Edit</a>
+      <a href="{% url 'delete_post' post.id %}">Delete</a>
+      {% if post.requested_by %}
+        <button data-bs-toggle="modal" data-bs-target="#ngoModal{{post.id}}">View NGO</button>
+        <a href="{% url 'accept_request' post.id %}">Accept</a>
+        <a href="{% url 'reject_request' post.id %}">Reject</a>
+        <!-- NGO info modal -->
+        <div class="modal fade" id="ngoModal{{post.id}}" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header"><h5>{{ post.requested_by.name }}</h5></div>
+              <div class="modal-body">
+                <p>Email: {{ post.requested_by.email }}</p>
+                <p>Contact: {{ post.requested_by.phone_no }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </li>
+  {% empty %}
+    <p>No donations yet.</p>
+  {% endfor %}
+</ul>
+{% endblock %}
