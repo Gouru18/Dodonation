@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Request a Donation</h2>
+
+  <form method="POST" action="{% url 'request_donation' %}">
+    {% csrf_token %}
+
+    <!-- Name -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Your Name</label>
+      <input type="text" name="name" id="name" class="form-control" required>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email Address</label>
+      <input type="email" name="email" id="email" class="form-control" required>
+    </div>
+
+    <!-- NGO Name -->
+    <div class="mb-3">
+      <label for="ngo" class="form-label">NGO / Organization Name</label>
+      <input type="text" name="ngo" id="ngo" class="form-control" required>
+    </div>
+
+    <!-- Donation Purpose -->
+    <div class="mb-3">
+      <label for="purpose" class="form-label">Purpose of Donation</label>
+      <textarea name="purpose" id="purpose" class="form-control" rows="4" required></textarea>
+    </div>
+
+    <!-- Amount -->
+    <div class="mb-3">
+      <label for="amount" class="form-label">Requested Amount (Rs)</label>
+      <input type="number" name="amount" id="amount" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Request</button>
+  </form>
+</div>
+{% endblock %}

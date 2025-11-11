@@ -2,24 +2,24 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Donation, DonationRequest, Profile
+from .models import Donation, DonationRequest, Profile, User
 from .forms import DonationForm, ProblemReportForm
 from django.contrib import messages 
 from django.http import JsonResponse, HttpResponseForbidden
 
-def home(request):
-    return HttpResponse("Welcome to the Donor Home page!")
+# def home(request):
+#     return HttpResponse("Welcome to the Donor Home page!")
 
 @login_required
 def donor_account(request):
-    if request.user.profile.user_type != 'donor':
+    if request.User.Profile.user_type != 'donor':
         return HttpResponseForbidden("Only donors can access this page.")
     donations = Donation.objects.filter(donor=request.user).order_by("-created_at")
     return render(request, "core/donor_account.html", {'donations': donations})
 
 @login_required
 def create_donation(request):
-    if request.user.profile.user_type != 'donor':
+    if request.User.Profile.user_type != 'donor':
         return HttpResponseForbidden("Only donors can create donations.")
     if request.method == 'POST':
         form = DonationForm(request.POST, request.FILES)
@@ -35,7 +35,7 @@ def create_donation(request):
 
 @login_required
 def edit_donation(request, pk):
-    donation = get_object_or_404(Donation, pk=pk, donor=request.user)
+    donation = get_object_or_404(Donation, pk=pk, donor=request.User)
     if request.method == 'POST':
         form = DonationForm(request.POST, request.FILES, instance=donation)
         if form.is_valid():
@@ -64,15 +64,15 @@ def view_ngo_profile(request, ngo_id):
         return JsonResponse({
             'name': ngo_user.get_full_name() or ngo_user.username,
             'email': ngo_user.email,
-            'contact': profile.contact_number,
-            'location': profile.location
+            'contact': Profile.contact_number,
+            'location': Profile.location
         })
     return render(request,'core/ngo_profile.html', {'ngo': ngo_user})
 
 @login_required
 def accept_request(request, req_id):
     req = get_object_or_404(DonationRequest, id=req_id)
-    if req.donation.donor != request.user:
+    if req.donation.donor != request.User:
         return HttpResponseForbidden()
     req.accepted = True
     req.save()
@@ -84,7 +84,7 @@ def accept_request(request, req_id):
 @login_required
 def reject_request(request, req_id):
     req = get_object_or_404(DonationRequest, id=req_id)
-    if req.donation.donor != request.user:
+    if req.donation.donor != request.User:
         return HttpResponseForbidden()
     req.accepted = False
     req.save()
@@ -102,3 +102,15 @@ def report_problem(request):
     else:
         form = ProblemReportForm()
     return render(request,'core/report_problem.html', {'form': form})
+
+@login_required
+def request_donation(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id)
+    if request.User.Profile.user_type != 'ngo':
+        return HttpResponseForbidden("Only NGOs can request donations.")
+    if request.method == 'POST':
+        message = request.POST.get('message','')
+        DonationRequest.objects.create(donation=donation, ngo=request.User, message=message)
+        messages.success(request,'Request sent to donor.')
+        return redirect('home')
+    return render(request,'core/request_donation.html', {'donation': donation})
