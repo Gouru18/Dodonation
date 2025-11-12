@@ -27,7 +27,7 @@ class Donation(models.Model):
     image = models.ImageField(upload_to='donation_images/', blank=True, null=True)
     donor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='donations')
 
-    def __str__(self):
+    def __str__(self):  # pylint: disable=no-member
         return self.title
 
 # Optional: extend user profile for contact info if needed
@@ -36,5 +36,4 @@ class UserProfile(models.Model):
     contact_number = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return self.user.username
-
+        return self.user.username # pylint: disable=no-member

@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
-from .models import Donation
+from donations.models import Donation
 from django.contrib.auth.models import User
 from django.db.models import Q
 
 def donation_list(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '')
-    donations = Donation.objects.all()
+    donations = Donation.objects.all() # pylint: disable=no-member
 
     if query:
         donations = donations.filter(
