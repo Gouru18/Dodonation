@@ -1,0 +1,21 @@
+button,
+.btn,
+input[type="submit"] {
+  background-color: #FFD700; 
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover,
+.btn:hover,
+input[type="submit"]:hover {
+  background-color: #ffcc00; 
+}
+
+.highlight {
+  background-color: #fff8cc; 
+}

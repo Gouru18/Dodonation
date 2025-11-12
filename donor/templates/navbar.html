@@ -1,0 +1,10 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #28a745;">
+  <ul class="navbar-nav">
+    <li><a class="nav-link text-white" href="{% url 'home' %}">Home</a></li>
+    <li><a class="nav-link text-white" href="{% url 'donor_account' %}">Account</a></li>
+    <li><a class="nav-link text-white" href="{% url 'report_problem' %}">Report</a></li>
+  </ul>
+</nav>
+
+{% load static %}
+<link rel="stylesheet" href="{%static 'donor/style.css'%}">

@@ -64,7 +64,14 @@ def login_view(request):
 
                 login(request, user)
                 messages.success(request, f"Welcome back, {user.username}!")
-                return redirect('home')
+
+                #  Redirect based on user type
+                if Donor.objects.filter(id=user.id).exists():
+                    return redirect('donor_account')   # donor goes to their account
+                elif Receiver.objects.filter(id=user.id).exists():
+                    return redirect('ngo_dashboard')   # or wherever your NGO page is
+                else:
+                    return redirect('home')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
