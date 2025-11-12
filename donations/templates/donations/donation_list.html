@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Donations</h2>
+<form method="get">
+  <input type="text" name="q" placeholder="Search donations or donor" value="{{ query }}">
+  <select name="category">
+    <option value="">All Categories</option>
+    <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
+    <option value="clothes" {% if category == 'clothes' %}selected{% endif %}>Clothes</option>
+    <option value="others" {% if category == 'others' %}selected{% endif %}>Others</option>
+  </select>
+  <button type="submit">Filter</button>
+</form>
+
+{% for donation in donations %}
+  <div class="donation-post">
+    <h3>{{ donation.title }}</h3>
+    <p>Category: {{ donation.get_category_display }}</p>
+    <p>Status: {{ donation.get_status_display }}</p>
+    <p>{{ donation.description }}</p>
+    <p>Quantity: {{ donation.quantity }}</p>
+    <p>Location: {{ donation.location }}</p>
+    <p>Expiry Date: {{ donation.expiry_date }}</p>
+    <p>Date Posted: {{ donation.date_created }}</p>
+    <p>Donor: <a href="{% url 'donor_profile' donation.donor.id %}">{{ donation.donor.username }}</a></p>
+  </div>
+{% empty %}
+  <p>No donations found.</p>
+{% endfor %}
+{% endblock %}

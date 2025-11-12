@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DoDonation</title>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+</head>
+<body>
+<nav>
+  <a href="{% url 'donation_list' %}">Donations</a>
+  <!-- Add more nav items per role -->
+</nav>
+<main>
+  {% block content %}
+  {% endblock %}
+</main>
+</body>
+</html>
