@@ -15,8 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include # <-- Make sure 'include' is here
+from core import views as core_views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('', core_views.homepage, name='homepage'), 
+
+    # Add this line to connect your reviews app
+    path('review/', include('reviews.urls')), 
 ]
