@@ -30,14 +30,20 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# Application definition
+
+# Application definition
+
 INSTALLED_APPS = [
+    'reviews',  # <-- From review branch
+    'core',     # <-- From homepage branch
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'donations'
 ]
 
 MIDDLEWARE = [
