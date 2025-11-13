@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="hero-section">
+    <div class="hero-text">
+        <h2>Connecting donors with NGOs</h2>
+        <div class="hero-buttons">
+            <a href="#" class="button">View donations</a>
+            <a href="#" class="button">Request donations</a>
+            <a href="#" class="button">Donate</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div style="width: 400px; height: 400px; background-color: #eee; border-radius: 50%; display: grid; place-items: center; font-size: 1.2rem; color: #888;">
+            (Image of donation box)
+        </div>
+    </div>
+</div>
+
+<div class="section-cream" id="about">
+    <h3>About Dodonation</h3>
+    <p>Our project is a web platform, named Dodonation which connects donors (individuals/shops that have excess items like food and clothing items) to vetted non-governmental organizations (NGOs) in their local area.</p>
+</div>
+
+<div class="section-white">
+    <h3>Our Recent Donations</h3>
+    <div class="donation-list">
+    {% for donation in recent_donations %}
+        <div class="donation-post-card" style="border: 1px solid #ccc; margin-bottom: 1rem; padding: 1rem; background-color: #fafafa;">
+        
+        <h4>{{ donation.title }}</h4>
+        <p><strong>Description:</strong> {{ donation.description }}</p>
+        <p><strong>Category:</strong> {{ donation.category }} | <strong>Quantity:</strong> {{ donation.quantity }}</p>
+        <p><strong>Location:</strong> {{ donation.location }}</p>
+        
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<div class="section-cream">
+    <h3>How to Claim Donations (for NGOs)</h3>
+    <ol>
+        <li><strong>Onboarding & Verification:</strong> Register your NGO. Admin will verify and approve your account.</li>
+        <li><strong>Donation Publishing:</strong> A donor posts a donation, and its status is "Available".</li>
+        <li><strong>Discovery & Request:</strong> Browse donations and make a request.</li>
+        <li><strong>Approval & Coordination:</strong> The donor approves your request. The status changes to "Claimed".</li>
+        <li><strong>Collection & Closure:</strong> Contact the donor to arrange pickup. The donor then sets the status to "Collected".</li>
+    </ol>
+</div>
+
+{% endblock %}
