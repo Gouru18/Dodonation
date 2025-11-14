@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Donations</h2>
-<form method="get">
+<form class="form-container" method="get">
   <input type="text" name="q" placeholder="Search donations or donor" value="{{ query }}">
   <select name="category">
     <option value="">All Categories</option>
@@ -13,7 +13,7 @@
 </form>
 
 {% for donation in donations %}
-  <div class="donation-post">
+  <div class="donation-card">
     <h3>{{ donation.title }}</h3>
     <p>Category: {{ donation.get_category_display }}</p>
     <p>Status: {{ donation.get_status_display }}</p>
@@ -25,6 +25,6 @@
     <p>Donor: <a href="{% url 'donor_profile' donation.donor.id %}">{{ donation.donor.username }}</a></p>
   </div>
 {% empty %}
-  <p>No donations found.</p>
+  <div class="form-container"><p>No donations found.</p></div>
 {% endfor %}
 {% endblock %}

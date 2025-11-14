@@ -1,0 +1,146 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f5f5dc;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #2e4d2b; 
+    min-height: 100vh;
+}
+
+/* Main wrapper for centering content */
+.main-content-wrapper {
+    width: 100%;
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 24px 12px;
+}
+
+/* Section Headers */
+h2 {
+    text-align: center;
+    margin-bottom: 18px;
+    color: #2e4d2b;
+}
+
+h3 {
+    color: #2e4d2b;
+    margin-bottom: 8px;
+}
+
+/* Donation post cards */
+.donation-card, .form-container, .card {
+    background-color: #e0f0c0; /* light green */
+    padding: 28px 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.14);
+    margin-bottom: 30px;
+    word-break: break-word;
+}
+
+.donation-card a {
+    color: #2e4d2b;
+    text-decoration: underline;
+}
+
+.donation-card p {
+    margin-bottom: 10px;
+}
+
+.donation-card p strong {
+    color: #234021;
+    font-size: 15px;
+}
+
+/* Forms, inputs, selects */
+form.form-container {
+    background-color: #e0f0c0;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin-bottom: 35px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    background-color: #2e4d2b;
+    color: #f5f5dc;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.18s;
+}
+
+button:hover, .btn-primary:hover {
+    background-color: #406a3a;
+}
+
+label {
+    font-weight: 500;
+    font-size: 15px;
+    margin-bottom: 7px;
+    color: #26432b;
+}
+
+/* Links */
+a {
+    color: #295a28;
+    transition: color 0.15s;
+    text-decoration: underline dotted;
+}
+a:hover {
+    color: #1d401b;
+}
+
+/* If you want to make the entire navbar uniform, add: */
+nav {
+    background-color: #cbe6a3;
+    padding: 12px 0;
+    margin-bottom: 36px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+    text-align: center;
+}
+nav a {
+    color: #2e4d2b;
+    padding: 0 18px;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+nav a:hover {
+    text-decoration: underline;
+    color: #406a3a;
+}
+
+/* For popup messages, toasts, etc (if needed) */
+.popup-message {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e0f0c0;
+    border: 2px solid #406a3a;
+    color: #234021;
+    border-radius: 10px;
+    padding: 24px 40px;
+    font-size: 19px;
+    z-index: 9999;
+    box-shadow: 0 2px 12px rgba(60,100,44,0.10);
+}
