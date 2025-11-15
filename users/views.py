@@ -4,6 +4,11 @@ from django.contrib.auth import authenticate, login
 from .forms import UserSignupForm, DonorSignupForm, ReceiverSignupForm, LoginForm
 from .models import Donor, Receiver
 
+from django.contrib.auth.decorators import login_required
+from .decorators import login_required_home
+from .models import Receiver
+from donations.models import DonationPost, ClaimRequest  # Assuming these exist
+
 
 def home_view(request):
     return render(request, 'users/home.html')
@@ -85,3 +90,35 @@ def select_role_view(request):
         else:
             messages.error(request, "Please select a role.")
     return render(request, 'users/select_role.html')
+
+
+@login_required_home
+def ngo_account_view(request):
+    user = request.user
+    if not hasattr(user, 'receiver'):
+        return redirect('home')  # safety check
+
+    receiver = user.receiver
+
+    # Donations claimed by this NGO
+    claimed = ClaimRequest.objects.filter(receiver=receiver, status='Accepted')
+
+    # Requests sent by this NGO
+    requests = ClaimRequest.objects.filter(receiver=receiver)
+
+    # Stats
+    total_requests = requests.count()
+    total_claimed = claimed.count()
+    success_rate = round((total_claimed / total_requests) * 100, 2) if total_requests else 0
+
+    context = {
+        'receiver': receiver,
+        'requests': requests,
+        'claimed': claimed,
+        'stats': {
+            'total_requests': total_requests,
+            'total_claimed': total_claimed,
+            'success_rate': success_rate,
+        }
+    }
+    return render(request, 'users/ngo_account.html', context)
