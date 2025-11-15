@@ -1,0 +1,60 @@
+/* Base layout and utilities (green + beige theme) */
+:root{
+  --green-600:#2e8f4a;
+  --green-700:#246b35;
+  --beige-100:#f5f0d8;
+  --beige-300:#e6d9a8;
+  --bg:#0e0e0e;
+}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:#fff; font-family: 'Segoe UI', Arial, sans-serif;
+}
+.container{ max-width:1100px; margin:20px auto; padding:0 16px; }
+.messages{ margin:12px 0; }
+.messages ul{ list-style:none; padding-left:0; margin:0; }
+.messages li{ padding:12px 16px; border-radius:6px; margin-bottom:8px; color:#e6e6e6; }
+.messages li.success{ background: linear-gradient(90deg, rgba(36,107,53,0.95), rgba(46,143,74,0.95)); color: var(--beige-100); }
+.messages li.info{ background: rgba(255,255,255,0.03); color:#e6e6e6; }
+.messages li.error{ background: linear-gradient(90deg, #8b2e2e, #b33a3a); color: #fff; }
+
+/* message close button */
+.messages li{ position:relative; }
+.messages .msg-close{ position:absolute; right:8px; top:6px; background:transparent; border:none; color:inherit; font-size:18px; cursor:pointer; }
+.messages .msg-text{ display:inline-block; margin-right:24px; }
+
+/* fade-out animation for auto-dismiss */
+.messages li{ transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease; }
+.messages li.fadeout{ opacity:0; transform: translateY(-8px); max-height:0; padding:0 16px; margin:0; overflow:hidden; }
+
+/* Buttons */
+.btn { background:var(--beige-300); color:#111; padding:8px 12px; border-radius:8px; display:inline-block; text-decoration:none; font-weight:700; }
+.btn:hover{ filter:brightness(0.98); }
+
+/* Utility */
+.muted{ color:#bdbdbd; }
+
+/* Welcome banner (shown on home after login) */
+.welcome-banner{ background: linear-gradient(90deg,var(--green-700),var(--green-600)); color:var(--beige-100); padding:16px 18px; border-radius:8px; font-size:1.1rem; margin-bottom:12px; }
+
+/* Feed grid layout */
+.feed-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:16px; }
+
+/* Post card styling */
+.post-card{ background:linear-gradient(180deg,var(--beige-100),var(--beige-300)); border-radius:10px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.25); transition:transform 0.2s; }
+.post-card:hover{ transform:translateY(-4px); }
+.post-image{ width:100%; height:200px; background:var(--green-600); overflow:hidden; }
+.post-image img{ width:100%; height:100%; object-fit:cover; }
+.post-info{ padding:14px; color:#111; }
+.post-info h3{ margin:0 0 8px 0; color:var(--green-700); font-size:1rem; }
+.post-category{ margin:4px 0; font-size:0.85rem; color:#666; font-weight:500; }
+.post-donor{ margin:4px 0; font-size:0.9rem; color:var(--green-700); }
+.post-description{ margin:8px 0; font-size:0.9rem; color:#444; line-height:1.4; }
+.post-meta{ display:flex; justify-content:space-between; margin:8px 0; font-size:0.85rem; color:#666; }
+.post-quantity, .post-location{ font-weight:500; }
+.btn-small{ background:var(--green-700); color:var(--beige-100); padding:6px 10px; border-radius:6px; text-decoration:none; font-size:0.9rem; font-weight:600; display:inline-block; margin-top:8px; }
+
+/* Delete shortcut button */
+.btn-delete{ background:#8b2e2e; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; }
+.btn-delete:hover{ filter:brightness(0.95); }
+

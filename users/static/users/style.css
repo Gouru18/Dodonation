@@ -1,69 +1,48 @@
+/* Scoped styles for user forms (dark theme to match site) */
 body {
-    background-color: #f5f5dc; /* beige */
+    background: #0b0b0b;
+    color: #e6e6e6;
     font-family: "Segoe UI", Arial, sans-serif;
-    color: #2e4d2b; /* dark green text */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    margin: 0;
 }
 
 .form-container {
-    background-color: #e0f0c0; /* light green */
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 350px;
+    background: linear-gradient(180deg,#121212 0%, #1a1a1a 100%);
+    padding: 28px 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    width: 420px;
+    margin: 36px auto;
+    border: 1px solid rgba(255,255,255,0.04);
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
+h2 { text-align:center; margin-bottom:18px; color:#fff; }
 
-input, select {
+input, select, textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px 14px;
     margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; /* ensures padding doesn't break width */
-    font-size: 14px;
-    font-family: "Segoe UI", Arial, sans-serif;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #24232b;
+    color: #e6e6e6;
+    box-sizing: border-box;
 }
 
 button {
-    width: 100%;
-    background-color: #2e4d2b;
-    color: beige;
+    background: linear-gradient(180deg,#ffd54f,#e6b800);
+    color: #111;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 10px 14px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-weight: 600;
 }
 
-button:hover {
-    background-color: #406a3a;
-}
+button:hover { filter:brightness(0.95); }
 
-#ngo-name-field {
-    transition: all 0.3s ease-in-out;
-}
+#ngo-name-field { transition: all .2s ease; }
 
+.popup-message { position: fixed; top: 14%; left: 50%; transform: translateX(-50%); background:#1e1e1e; color:#fff; border:1px solid rgba(255,255,255,0.06); padding:16px 22px; border-radius:8px; z-index:9999; }
 
-.popup-message {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #e0f0c0; /* light green */
-    color: #2e4d2b; /* dark green text */
-    border: 2px solid #2e4d2b;
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    z-index: 1000;
-    text-align: center;
-    font-weight: bold;
-}
+@media (max-width:520px) { .form-container { width:92%; margin:20px auto; padding:18px; } }

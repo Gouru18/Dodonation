@@ -1,9 +1,15 @@
-{% extends 'navbar.html' %}
+{% extends 'base.html' %}
+{% block title %}Report a Problem{% endblock %}
+
 {% block content %}
-<h2>Report a Problem</h2>
-<form method="POST">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Submit</button>
-</form>
+<div class="container">
+  <div class="form-container">
+    <h2>Report a Problem</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

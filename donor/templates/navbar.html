@@ -1,10 +1,22 @@
-<nav class="navbar navbar-expand-lg" style="background-color: #28a745;">
+{% load static %}
+<nav class="navbar navbar-expand-lg">
   <ul class="navbar-nav">
-    <li><a class="nav-link text-white" href="{% url 'home' %}">Home</a></li>
-    <li><a class="nav-link text-white" href="{% url 'donor_account' %}">Account</a></li>
-    <li><a class="nav-link text-white" href="{% url 'report_problem' %}">Report</a></li>
+    <li class="nav-left"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+    {% if user.is_authenticated %}
+      <li><a class="nav-link" href="{% url 'donor_account' %}">Account</a></li>
+      <li><a class="nav-link" href="{% url 'report_problem' %}">Report</a></li>
+      <li>
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+          {% csrf_token %}
+          <button type="submit">Logout</button>
+        </form>
+      </li>
+      <li class="nav-item"><span class="nav-link">Hi, {{ user.username }}</span></li>
+    {% else %}
+      <li><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+      <li><a class="nav-link" href="{% url 'select_role' %}">Sign Up</a></li>
+    {% endif %}
   </ul>
 </nav>
 
-{% load static %}
-<link rel="stylesheet" href="{%static 'donor/style.css'%}">
+{# messages rendered centrally in base.html - remove duplicate here #}

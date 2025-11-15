@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.conf import settings
 from .forms import UserSignupForm, DonorSignupForm, ReceiverSignupForm, LoginForm
 from .models import Donor, Receiver
+from donor.models import DonationPost
 
 
 def home_view(request):
-    return render(request, 'users/home.html')
+    # Show feed of all posts for logged-in users
+    posts = DonationPost.objects.all().order_by('-created_at')
+    return render(request, 'users/home.html', {'posts': posts})
 
 
 def donor_signup_view(request):
@@ -63,15 +67,11 @@ def login_view(request):
                     return redirect('home')
 
                 login(request, user)
+                # Show a one-time welcome message after login (will be displayed by base.html)
                 messages.success(request, f"Welcome back, {user.username}!")
-
-                #  Redirect based on user type
-                if Donor.objects.filter(id=user.id).exists():
-                    return redirect('donor_account')   # donor goes to their account
-                elif Receiver.objects.filter(id=user.id).exists():
-                    return redirect('ngo_dashboard')   # or wherever your NGO page is
-                else:
-                    return redirect('home')
+                # Redirect to next_page if provided, otherwise use LOGIN_REDIRECT_URL
+                next_page = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
+                return redirect(next_page)
             else:
                 messages.error(request, "Invalid username or password.")
         else:
