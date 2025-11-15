@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserSignupForm, DonorSignupForm, ReceiverSignupForm, LoginForm
-from .models import Donor, Receiver
+from .models import ClaimRequest, Donor, Receiver, User
 
 def donor_signup_view(request):
     if request.method == 'POST':
@@ -187,3 +187,144 @@ def ngo_account_view(request):
     }
     return render(request, 'users/ngo_account.html', context)
 
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+from .models import Donation
+
+def donation_list(request):
+    query = request.GET.get('q', '')
+    category = request.GET.get('category', '')
+    donations = Donation.objects.all()
+
+    if query:
+        donations = donations.filter(
+            Q(title__icontains=query) | Q(donor__username__icontains=query)
+        )
+    if category:
+        donations = donations.filter(category=category)
+
+    # Handle NGO claiming a donation
+    if request.method == 'POST':
+        if not request.user.is_authenticated or not hasattr(request.user, 'receiver'):
+            messages.error(request, "You must be logged in as an NGO to claim a donation.")
+            return redirect('login')
+
+        donation_id = request.POST.get('donation_id')
+        donation = get_object_or_404(Donation, id=donation_id)
+        receiver = request.user.receiver
+
+        # Avoid duplicate claims
+        if not ClaimRequest.objects.filter(post=donation, receiver=receiver).exists():
+            ClaimRequest.objects.create(post=donation, receiver=receiver, status='Pending')
+            messages.success(request, "You have successfully requested this donation!")
+
+        return redirect('donation_list')
+
+    context = {
+        'donations': donations,
+        'query': query,
+        'category': category,
+    }
+    return render(request, 'users/donation_list.html', context)
+from django.contrib.auth.decorators import login_required
+from .forms import DonorProfileForm, DonationForm
+from django.shortcuts import get_object_or_404
+
+@login_required
+def donor_profile(request):
+    donor = request.user
+    donations = donor.donations.all().order_by('-date_created')
+
+    # Handle profile update
+    if request.method == 'POST' and 'update_profile' in request.POST:
+        profile_form = DonorProfileForm(request.POST, instance=donor)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('donor_profile')
+    else:
+        profile_form = DonorProfileForm(instance=donor)
+
+    # Handle new donation
+    if request.method == 'POST' and 'create_donation' in request.POST:
+        donation_form = DonationForm(request.POST, request.FILES)
+        if donation_form.is_valid():
+            new_donation = donation_form.save(commit=False)
+            new_donation.donor = donor
+            new_donation.save()
+            messages.success(request, "Donation post created!")
+            return redirect('donor_profile')
+    else:
+        donation_form = DonationForm()
+
+    context = {
+        'profile_form': profile_form,
+        'donation_form': donation_form,
+        'donations': donations
+    }
+    return render(request, 'users/donor_profile.html', context)
+
+@login_required
+def edit_donation(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
+    if request.method == 'POST':
+        form = DonationForm(request.POST, request.FILES, instance=donation)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Donation updated!")
+            return redirect('donor_profile')
+    else:
+        form = DonationForm(instance=donation)
+    return render(request, 'users/edit_donation.html', {'form': form})
+
+@login_required
+def delete_donation(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
+    donation.delete()
+    messages.success(request, "Donation deleted!")
+    return redirect('donor_profile')
+
+@login_required
+def donation_requests(request):
+    # Get all claim requests for donations by this donor
+    requests = ClaimRequest.objects.filter(donation__donor=request.user)
+
+    if request.method == 'POST':
+        req_id = request.POST.get('request_id')
+        action = request.POST.get('action')
+        req = get_object_or_404(ClaimRequest, id=req_id)
+        if action == 'accept':
+            req.status = 'Accepted'
+            req.donation.status = 'claimed'
+            req.donation.save()
+            req.save()
+        elif action == 'reject':
+            req.status = 'Rejected'
+            req.save()
+        return redirect('donation_requests')
+
+    return render(request, 'users/donation_requests.html', {'requests': requests})
+
+@login_required
+def ngo_public_profile(request, ngo_id):
+    # Get the NGO object (Receiver)
+    ngo = get_object_or_404(Receiver, id=ngo_id)
+    
+    # Optional: show donations requested by this NGO
+    requests_made = ngo.requests.all()  # Assuming ClaimRequest has receiver foreign key
+    
+    context = {
+        'ngo': ngo,
+        'requests_made': requests_made,
+    }
+    return render(request, 'users/ngo_public_profile.html', context)
+
+def donor_public_profile(request, donor_id):
+    donor = get_object_or_404(Donor, id=donor_id)
+    donations = donor.donations.filter(status='available')  # Or show all
+
+    context = {
+        'donor': donor,
+        'donations': donations,
+    }
+    return render(request, 'users/donor_public_profile.html', context)

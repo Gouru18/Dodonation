@@ -107,3 +107,19 @@ class ReportForm(forms.ModelForm):
         if not message:
             raise ValidationError("Message cannot be empty.")
         return message
+
+from .models import Donation
+
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ['title', 'description', 'category', 'quantity', 'expiry_date', 'location', 'image_url']
+        widgets = {
+            'expiry_date': forms.DateInput(attrs={'type': 'date'}),
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'image_url': forms.URLInput(attrs={'placeholder': 'Enter image URL'}),
+        }
+class DonorProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'phone_no']
