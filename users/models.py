@@ -11,7 +11,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     phone_no = models.CharField(max_length=15)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='donor')  # <<< ADD THIS
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='donor')
 
     USERNAME_FIELD = 'username'  # login by username
     REQUIRED_FIELDS = ['email', 'phone_no']
@@ -35,12 +35,26 @@ class Receiver(User):
     def __str__(self):
         return f"Receiver: {self.name}"
 
-
 class GeneralReview(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True) # Automatically sets the time
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        if self.user:
+            return f'Review by {self.user.username}'
         return f'Review by {self.name}'
+    
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        if self.user:
+            return f'Report by {self.user.username}'
+        return f'Report by {self.name}'

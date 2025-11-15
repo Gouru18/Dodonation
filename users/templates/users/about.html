@@ -2,33 +2,117 @@
 {% load static %}
 
 {% block content %}
+
+<style>
+    .about-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        line-height: 1.7;
+    }
+
+    .about-title {
+        text-align: center;
+        color: var(--dark-green);
+        font-size: 2.4rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+
+    .about-description {
+        text-align: center;
+        font-size: 1.15rem;
+        margin-bottom: 3rem;
+        color: #444;
+    }
+
+    .stats-box {
+        background: var(--light-green);
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin: 2rem 0;
+        color: var(--dark-green);
+    }
+
+    .stats-number {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-top: 0.5rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        color: var(--medium-green);
+        margin-top: 2rem;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .info-list p {
+        font-size: 1.15rem;
+        margin: 0.8rem 0;
+    }
+
+    .info-list a {
+        color: var(--dark-green);
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .info-list a:hover {
+        text-decoration: underline;
+    }
+
+    .social-links {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .social-links a {
+        margin: 0 0.5rem;
+        font-weight: bold;
+        color: var(--medium-green);
+    }
+</style>
+
+
 <section class="section-cream">
-    <h2 style="color: var(--dark-green); text-align: center;">About DoDonation</h2>
-    <p style="max-width: 800px; margin: 1rem auto; font-size: 1.1rem; line-height: 1.6;">
-        "Our project is a web platform, named Dodonation which connects donors (individuals/shops that have excess items like food and clothing items) to vetted non-governmental organizations (NGOs) in their local area."
-        DoDonation is a community-powered platform that connects generous individuals with NGOs in need.
-        Our mission is to reduce waste and promote social good by making it easy to donate usable items
-        like clothes, books, furniture, and electronics.
-    </p>
+    <div class="about-container">
 
-    <div style="text-align: center; margin: 2rem 0;">
-        <h3 style="color: var(--medium-green); font-size: 2rem;">Total Donations Till Today:</h3>
-        <p style="font-size: 3rem; font-weight: bold; color: var(--dark-green);">
-            {{ donation_count }}
+        <h2 class="about-title">About DoDonation</h2>
+
+        <p class="about-description">
+            DoDonation is a community-powered platform that connects generous individuals with NGOs in need.
+            We aim to reduce waste, support communities, and make meaningful giving simple and accessible.
         </p>
-    </div>
 
-    <h3 style="color: var(--medium-green); margin-top: 2rem;">Contact & Social Links</h3>
-    <div style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
-        <p><strong>Address:</strong> 123 Charity Lane, Port Louis, Mauritius</p>
-        <p><strong>Phone:</strong> <a href="tel:+2301234567">+230 123 4567</a></p>
-        <p><strong>WhatsApp:</strong> <a href="https://wa.me/2301234567" target="_blank">Chat with us</a></p>
-        <p><strong>Email:</strong> <a href="mailto:contact@dodonation.org">contact@dodonation.org</a></p>
-        <p><strong>Follow us:</strong>
+        <!-- Stats box -->
+        <div class="stats-box">
+            <h3>Total Donations Till Today</h3>
+            <div class="stats-number">{{ donation_count }}</div>
+        </div>
+
+        <h3 class="section-title">Contact & Social Links</h3>
+
+        <div class="info-list">
+            <p><strong>Address:</strong> 123 Charity Lane, Port Louis, Mauritius</p>
+            <p><strong>Phone:</strong> <a href="tel:+2301234567">+230 123 4567</a></p>
+            <p><strong>WhatsApp:</strong> <a href="https://wa.me/2301234567" target="_blank">Chat with us</a></p>
+            <p><strong>Email:</strong> <a href="mailto:contact@dodonation.org">contact@dodonation.org</a></p>
+        </div>
+
+        <div class="social-links">
+            <strong>Follow us:</strong><br>
             <a href="https://facebook.com/dodonation" target="_blank">Facebook</a> |
             <a href="https://instagram.com/dodonation" target="_blank">Instagram</a> |
-            <a href="https://linkedin.com/company/dodonation" target="_blank">X (formerly Twitter)</a>
-        </p>
+            <a href="https://linkedin.com/company/dodonation" target="_blank">X (Twitter)</a>
+        </div>
+
     </div>
 </section>
+
 {% endblock %}

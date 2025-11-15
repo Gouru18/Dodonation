@@ -1,10 +1,18 @@
-<nav class="navbar">
-    <a href="{% url 'homepage' %}">Home</a>
+{% load static %}
 
-    <a href="{% url 'about' %}">About</a>
+<div class="navbar">
+    <div class="navbar-left">
+        <a href="{% url 'homepage' %}">
+            <img src="{% static 'users/images/logo.png' %}" class="navbar-logo">
+        </a>
 
-    <a href="#">Donations</a>
+        <a href="{% url 'homepage' %}">Home</a>
+        <a href="#">Donations</a>
+        <a href="{% url 'about' %}">About</a>
+    </div>
 
-    <a href="{% url 'select_role'%}" class="navbar-right navbar-button">Sign Up</a>
-    <a href="{% url 'login'%}" class="navbar-right">Login</a>
-</nav>
+    <div class="navbar-right">
+        <a href="{% url 'login' %}" class="navbar-button">Login</a>
+        <a href="{% url 'select_role' %}" class="navbar-button">Sign Up</a>
+    </div>
+</div>

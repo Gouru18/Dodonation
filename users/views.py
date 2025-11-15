@@ -9,7 +9,7 @@ def donor_signup_view(request):
         form = DonorSignupForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.role = "donor"     # <<< ADD THIS LINE
+            user.role = "donor"  
             user.set_password(form.cleaned_data['password'])
             user.save()
             messages.success(request, "Signup successful! Please log in.")
@@ -27,7 +27,7 @@ def ngo_signup_view(request):
         form = ReceiverSignupForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.role = "ngo"        # <<< ADD THIS LINE
+            user.role = "ngo"        
             user.set_password(form.cleaned_data['password'])
             user.is_active = False  # Wait for admin approval
             user.save()
@@ -57,11 +57,11 @@ def login_view(request):
                 # Prevent unapproved NGOs from logging in
                 if Receiver.objects.filter(id=user.id).exists() and not user.is_active:
                     messages.info(request, "Your NGO verification is still pending.")
-                    return redirect('home')
+                    return redirect('homepage')
 
                 login(request, user)
                 messages.success(request, f"Welcome back, {user.username}!")
-                return redirect('home')
+                return redirect('homepage')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -114,9 +114,30 @@ def leave_review(request):
     }
     return render(request, 'users/leave_review.html', context)
 
+from .models import Report
+from .forms import ReportForm
+
+def leave_report(request):
+    # Handle form submission
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('leave_report')  # Redirect back to the same page
+    else:
+        form = ReportForm()  # Empty form for GET request
+
+    # Fetch all existing reports to display
+    reports = Report.objects.order_by('-created_at')  # Newest first
+
+    context = {
+        'form': form,
+        'reports': reports
+    }
+    return render(request, 'users/leave_report.html', context)
+
+
 def homepage(request):
-    # This page is for your Task 6.
-    # [cite_start]Your System Spec shows the Donation model has a 'date_created' field[cite: 204].
 
     # --- FOR TESTING ---
     # We can't get real donations yet (Poshita/Vedna's task).
@@ -165,3 +186,4 @@ def ngo_account_view(request):
         }
     }
     return render(request, 'users/ngo_account.html', context)
+
