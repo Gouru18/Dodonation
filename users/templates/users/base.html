@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-M">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodonation</title>
+    <style>
+        /* === FULL STYLE BLOCK === */
+        
+        /* Your color palette */
+        :root {
+            --dark-green: #386641;
+            --medium-green: #6A994E;
+            --light-green: #A7C957;
+            --cream: #F2E8CF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navbar using the dark green */
+        .navbar { 
+            background-color: var(--dark-green); 
+            color: white; 
+            padding: 1rem; 
+        }
+        .navbar a { 
+            color: white; 
+            margin-right: 1rem; 
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons using the medium green */
+        .button {
+            background-color: var(--medium-green);
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        /* Section backgrounds */
+        .section-cream {
+            background-color: var(--cream);
+            padding: 2rem;
+        }
+        
+        .section-white {
+            padding: 2rem;
+        }
+
+        /* Style for the 'Sign Up' button in the navbar */
+        .navbar-button {
+            background-color: var(--light-green); /* A7C957 */
+            color: var(--dark-green); /* 386641 */
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .navbar-button:hover {
+            opacity: 0.9;
+            text-decoration: none;
+        }
+
+        /* Helper to push Login/Signup to the right */
+        .navbar-right {
+            float: right;
+        }
+
+        /* New Hero Section for Homepage */
+        .hero-section {
+            background-color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-text {
+            flex: 1;
+            padding-right: 2rem;
+        }
+        .hero-text h2 {
+            font-size: 2.5rem;
+            color: var(--dark-green); /* 386641 */
+        }
+        .hero-buttons .button {
+            margin: 0.5rem;
+            background-color: var(--light-green); /* A7C957 */
+            color: var(--dark-green); /* 386641 */
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .hero-image {
+            flex: 1;
+            margin-left:10%;
+            
+        }
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 50%; /* Makes the image circular */
+        }
+        /* === END OF STYLES === */
+    </style>
+
+</head>
+<body>
+
+<header>
+    {% if request.user.is_authenticated %}
+        {% if request.user.role == 'donor' %}
+            {% include 'users/_navbar_donor.html' %}
+        {% elif request.user.role == 'ngo' %}
+            {% include 'users/_navbar_ngo.html' %}
+        {% else %}
+            {% include 'users/_navbar_visitor.html' %}  {# fallback for logged-in users with no role #}
+        {% endif %}
+    {% else %}
+        {% include 'users/_navbar_visitor.html' %}
+    {% endif %}
+</header>
+
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="section-cream" style="text-align: center;">
+        <h3>Contact info</h3>
+        <p>&copy; 2025 Dodonation</p>
+    </footer>
+
+</body>
+</html>

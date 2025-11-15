@@ -69,3 +69,10 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
         label="Password"
     )
+
+from .models import GeneralReview
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = GeneralReview
+        fields = ['name', 'email', 'message']
