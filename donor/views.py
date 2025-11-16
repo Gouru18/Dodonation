@@ -11,7 +11,7 @@ def donor_account_view(request):
         donor = Donor.objects.get(username=request.user.username)
     except Donor.DoesNotExist:
         messages.error(request, "You are not authorized as a donor.")
-        return redirect('home')
+        return redirect('homepage')
 
     # Posts belonging to this donor
     own_posts = DonationPost.objects.filter(donor__username=request.user.username).order_by('-created_at')
@@ -26,7 +26,7 @@ def edit_profile_view(request):
         donor = Donor.objects.get(username=request.user.username)
     except Donor.DoesNotExist:
         messages.error(request, "You are not authorized as a donor.")
-        return redirect('home')
+        return redirect('homepage')
 
     if request.method == 'POST':
         form = DonorEditForm(request.POST, instance=donor)
@@ -48,7 +48,7 @@ def create_post_view(request):
         donor = Donor.objects.get(username=request.user.username)
     except Donor.DoesNotExist:
         messages.error(request, "Only donors can create posts.")
-        return redirect('home')
+        return redirect('homepage')
 
     if request.method == 'POST':
         form = DonationPostForm(request.POST, request.FILES)
@@ -112,7 +112,7 @@ def report_problem_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Your problem has been reported successfully.")
-            return redirect('home')
+            return redirect('homepage')
     else:
         form = ProblemReportForm()
     return render(request, 'donor/report_problem.html', {'form': form})
@@ -125,7 +125,7 @@ def donation_requests_view(request):
         donor = Donor.objects.get(username=request.user.username)
     except Donor.DoesNotExist:
         messages.error(request, "You are not authorized as a donor.")
-        return redirect('home')
+        return redirect('homepage')
 
     requests = DonationPost.objects.filter(donor=donor, is_requested=True).order_by('-created_at')
     return render(request, 'donor/requests.html', {'requests': requests})

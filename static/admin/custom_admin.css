@@ -1,0 +1,28 @@
+/* Dashboard Cards */
+.dashboard-card {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Colored badges */
+.badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.badge-success { background-color: #28a745; }
+.badge-warning { background-color: #ffc107; color: #000; }
+.badge-danger  { background-color: #dc3545; }
+
+/* Improve admin table spacing */
+table#result_list th, table#result_list td {
+    padding: 10px 8px;
+}

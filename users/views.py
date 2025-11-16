@@ -60,8 +60,12 @@ def login_view(request):
                     return redirect('homepage')
 
                 login(request, user)
-                # Show a one-time welcome message after login (will be displayed by base.html)
-                messages.success(request, f"Welcome back, {user.username}!")
+                # Use messages.success for login success (will be converted to alert in template)
+                messages.success(request, f"Welcome back, {user.username}!", extra_tags='alert')
+                
+                # Redirect superusers/staff to admin panel, others to homepage
+                if user.is_superuser or user.is_staff:
+                    return redirect('admin:index')
                 return redirect('homepage')
             else:
                 messages.error(request, "Invalid username or password.")

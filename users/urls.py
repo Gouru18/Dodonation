@@ -5,7 +5,6 @@ from . import views
 urlpatterns = [
       path('',views.homepage, name='homepage'),
     path('login/', views.login_view, name='login'),  # login page
-   
     path('select-role/', views.select_role_view, name='select_role'),
     path('donor-signup/', views.donor_signup_view, name='donor_signup'),  # donor signup
     path('ngo-signup/', views.ngo_signup_view, name='ngo_signup'),  # NGO signup
@@ -22,5 +21,4 @@ path('ngo/<int:ngo_id>/', views.ngo_public_profile, name='ngo_public_profile'),
 path('donor_public_profile/<int:donor_id>/', views.donor_public_profile, name='donor_public_profile'),
     path('donation/edit/<int:donation_id>/', views.edit_donation, name='edit_donation'),
     path('donation/delete/<int:donation_id>/', views.delete_donation, name='delete_donation'),
-
 ]

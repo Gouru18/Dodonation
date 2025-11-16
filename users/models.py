@@ -31,6 +31,8 @@ class Receiver(User):
     receiverID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     reg_number = models.CharField(max_length=50)
+    is_validated = models.BooleanField(default=False, help_text="Admin confirmed NGO existence")
+    is_confirmed = models.BooleanField(default=False, help_text="Admin confirmed NGO registration")
 
     def __str__(self):
         return f"Receiver: {self.name}"

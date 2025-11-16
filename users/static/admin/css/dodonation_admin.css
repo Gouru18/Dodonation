@@ -1,0 +1,284 @@
+:root {
+    --green-600: #2e8f4a;
+    --green-700: #246b35;
+    --beige-100: #f5f0d8;
+    --beige-300: #e6d9a8;
+    --dark-bg: #0e0e0e;
+}
+
+html, body {
+    background-color: var(--dark-bg) !important;
+    color: var(--beige-100) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#header {
+    background: linear-gradient(90deg, var(--green-700) 0%, var(--green-600) 100%) !important;
+    border-bottom: 3px solid var(--beige-300) !important;
+    padding: 15px 20px !important;
+    text-align: center !important;
+}
+
+#header h1 {
+    color: var(--beige-100) !important;
+    font-size: 28px !important;
+    margin: 0 !important;
+}
+
+#header h1 a {
+    color: var(--beige-100) !important;
+    text-decoration: none !important;
+}
+
+#user-tools {
+    color: var(--beige-100) !important;
+    margin: 10px 0 0 0 !important;
+    text-align: center !important;
+}
+
+#user-tools a {
+    color: var(--beige-300) !important;
+    text-decoration: none !important;
+    margin: 0 10px !important;
+}
+
+#user-tools a:hover {
+    color: var(--beige-300) !important;
+}
+
+#container {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+}
+
+#nav-sidebar {
+    display: none !important;
+}
+
+#content {
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 40px 20px !important;
+    background-color: var(--dark-bg) !important;
+}
+
+#content-main {
+    background-color: var(--dark-bg) !important;
+    margin: 0 auto !important;
+    max-width: 1200px !important;
+}
+
+.breadcrumbs {
+    color: var(--beige-100) !important;
+    margin-bottom: 20px !important;
+}
+
+.breadcrumbs a {
+    color: var(--beige-300) !important;
+}
+
+.module {
+    background-color: rgba(26, 26, 26, 0.7) !important;
+    border: 1px solid var(--green-600) !important;
+    border-radius: 6px !important;
+    margin-bottom: 25px !important;
+    overflow: hidden !important;
+}
+
+.module h2 {
+    background: linear-gradient(90deg, var(--green-700), var(--green-600)) !important;
+    color: var(--beige-100) !important;
+    border-left: 4px solid var(--beige-300) !important;
+    padding: 12px 20px !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+}
+
+.module table {
+    background-color: transparent !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.module table th {
+    background: rgba(46, 143, 74, 0.2) !important;
+    color: var(--beige-100) !important;
+    padding: 12px 20px !important;
+    text-align: left !important;
+    border-bottom: 1px solid var(--green-600) !important;
+}
+
+.module table td {
+    color: var(--beige-100) !important;
+    border-bottom: 1px solid var(--green-600) !important;
+    padding: 10px 20px !important;
+}
+
+.module table tbody tr:nth-child(odd) {
+    background-color: rgba(46, 143, 74, 0.08) !important;
+}
+
+.module table tbody tr:hover {
+    background-color: rgba(46, 143, 74, 0.15) !important;
+}
+
+.module table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.button, input[type="submit"], input[type="button"], input[type="reset"] {
+    background: linear-gradient(90deg, var(--green-700), var(--green-600)) !important;
+    color: var(--beige-100) !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+}
+
+.button:hover, input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover {
+    background: linear-gradient(90deg, var(--green-600), var(--green-700)) !important;
+    transform: translateY(-2px) !important;
+}
+
+input[type="text"], input[type="email"], input[type="password"], 
+input[type="number"], input[type="date"], textarea, select {
+    background-color: #1a1a1a !important;
+    color: var(--beige-100) !important;
+    border: 1px solid var(--green-600) !important;
+    padding: 8px 12px !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus,
+input[type="number"]:focus, input[type="date"]:focus, textarea:focus, select:focus {
+    border-color: var(--beige-300) !important;
+    box-shadow: 0 0 0 3px rgba(46, 143, 74, 0.2) !important;
+    outline: none !important;
+}
+
+.paginator, .pagination {
+    color: var(--beige-100) !important;
+    text-align: center !important;
+    margin: 25px 0 !important;
+    padding: 15px !important;
+}
+
+.paginator a, .pagination a, .paginator .step-links a, .step-links a {
+    background-color: rgba(46, 143, 74, 0.2) !important;
+    border: 1px solid var(--green-600) !important;
+    color: var(--beige-300) !important;
+    margin: 0 3px !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+.paginator a:hover, .pagination a:hover, .paginator .step-links a:hover, .step-links a:hover {
+    background-color: rgba(46, 143, 74, 0.4) !important;
+    color: var(--beige-300) !important;
+}
+
+.step-links .step-links span {
+    margin: 0 3px !important;
+}
+
+a {
+    color: #64b5f6 !important;
+    text-decoration: none !important;
+}
+
+a:hover {
+    color: var(--beige-300) !important;
+    text-decoration: underline !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--beige-100) !important;
+}
+
+label {
+    color: var(--beige-100) !important;
+    display: block !important;
+    margin-bottom: 5px !important;
+}
+
+.help {
+    color: var(--beige-300) !important;
+    font-size: 12px !important;
+    margin-top: 3px !important;
+}
+
+.errornote {
+    background-color: rgba(255, 0, 0, 0.1) !important;
+    border: 1px solid #ff6b6b !important;
+    color: #ff8787 !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    margin-bottom: 20px !important;
+}
+
+.instruction {
+    color: var(--beige-100) !important;
+    background-color: rgba(46, 143, 74, 0.1) !important;
+    border-left: 4px solid var(--green-600) !important;
+    padding: 12px !important;
+    margin-bottom: 20px !important;
+    border-radius: 4px !important;
+}
+
+fieldset {
+    border: 1px solid var(--green-600) !important;
+    background-color: rgba(26, 26, 26, 0.3) !important;
+    padding: 15px !important;
+    border-radius: 4px !important;
+    margin-bottom: 20px !important;
+}
+
+fieldset h2 {
+    background: rgba(46, 143, 74, 0.3) !important;
+    color: var(--beige-100) !important;
+    margin: -15px -15px 10px -15px !important;
+    padding: 10px 15px !important;
+    border-radius: 4px 4px 0 0 !important;
+}
+
+.row {
+    display: flex !important;
+    gap: 20px !important;
+    margin-bottom: 25px !important;
+    flex-wrap: wrap !important;
+}
+
+.row > div {
+    flex: 1 1 calc(50% - 10px) !important;
+    min-width: 350px !important;
+}
+
+@media (max-width: 1024px) {
+    .row > div {
+        flex: 1 1 100% !important;
+    }
+}
+
+.submit-row {
+    text-align: center !important;
+    padding: 20px 0 !important;
+}
+
+.submit-row .button {
+    margin: 0 10px !important;
+}
+
+.message {
+    background-color: rgba(46, 143, 74, 0.2) !important;
+    border: 1px solid var(--green-600) !important;
+    color: var(--beige-100) !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    margin-bottom: 20px !important;
+}

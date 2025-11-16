@@ -9,7 +9,7 @@ class DonationPost(models.Model):
         ('Other', 'Other'),
     ]
 
-    donor = models.ForeignKey(Donor, on_delete=models.CASCADE, related_name='donations')
+    donor = models.ForeignKey(Donor, on_delete=models.CASCADE, related_name='donation_posts')
     title = models.CharField(max_length=100)
     description = models.TextField()
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
