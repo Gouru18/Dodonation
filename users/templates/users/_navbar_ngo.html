@@ -1,0 +1,20 @@
+{% load static %}
+
+<div class="navbar">
+    <div class="navbar-left">
+        <a href="{% url 'homepage' %}">
+            <img src="{% static 'users/images/logo.png' %}" class="navbar-logo">
+        </a>
+
+        <a href="{% url 'homepage' %}">Home</a>
+        <a href="{% url 'donation_list' %}">Donations</a>
+        <a href="{% url 'leave_review' %}">Reviews</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'leave_report' %}">Report a problem</a>
+    </div>
+
+    <div class="navbar-right">
+        <a href="" class="navbar-button">Profile</a>
+        <a href="{% url 'logout' %}" class="navbar-button">Logout</a>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .section-cream {
+        background: #f5f0e6; /* your beige */
+        padding: 3rem 5%;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+    }
+
+    .section-white {
+        background: white;
+        padding: 3rem 5%;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+    }
+
+    .donation-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .donation-card {
+        padding: 1.5rem;
+        background: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        transition: 0.2s;
+    }
+
+    .donation-card:hover {
+        border-color: var(--medium-green);
+        transform: translateY(-3px);
+    }
+
+    .steps-list li {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+</style>
+
+
+<!--  HERO -->
+<div class="hero-section">
+    <div class="hero-text">
+        <h2>Connecting donors with NGOs</h2>
+        <div class="hero-buttons">
+            <a href="#" class="button">View donations</a>
+            <a href="#" class="button">Request donations</a>
+            <a href="{% url 'login' %}" class="button">Donate</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div style="width: 400px; height: 400px; background-color: #eee; border-radius: 50%; display: grid; place-items: center; font-size: 1.2rem; color: #888;">
+            <img src="https://media.istockphoto.com/id/1167703234/vector/donation-box-full-of-toys-books-clothes-devices.jpg?s=612x612&w=0&k=20&c=QIRhgCgLKwRjwnii5WFoEuYfrMdI01M3WQuS8dw3PcA=" alt="Hero Image" style="width:100%; height:100%; border-radius:50%;">
+        </div>
+    </div>
+</div>
+
+
+<!--  ABOUT SECTION -->
+<div class="section-cream" id="about">
+    <h3>About Dodonation</h3>
+    <p>
+        Our project is a web platform, named Dodonation which connects donors 
+        (individuals/shops that have excess items like food and clothing items) 
+        to vetted NGOs in their local area.
+    </p>
+</div>
+
+
+<!-- RECENT DONATIONS -->
+<div class="section-white">
+    <h3>Our Recent Donations</h3>
+
+    <div class="donation-list">
+        {% for donation in recent_donations %}
+        <div class="donation-card">
+            <h4>{{ donation.title }}</h4>
+            <p><strong>Description:</strong> {{ donation.description }}</p>
+            <p><strong>Category:</strong> {{ donation.category }}</p>
+            <p><strong>Quantity:</strong> {{ donation.quantity }}</p>
+            <p><strong>Location:</strong> {{ donation.location }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<!-- CLAIMING STEPS -->
+<div class="section-cream">
+    <h3>How to Claim Donations (for NGOs)</h3>
+    <ol class="steps-list">
+        <li><strong>Onboarding & Verification:</strong> Register your NGO. Admin will verify and approve.</li>
+        <li><strong>Donation Publishing:</strong> Donors publish available items.</li>
+        <li><strong>Request:</strong> NGOs browse and request donations.</li>
+        <li><strong>Approval:</strong> Donor approves and status becomes “Claimed”.</li>
+        <li><strong>Collection:</strong> Pickup is arranged, then marked “Collected”.</li>
+    </ol>
+</div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'users/base.html' %}
+{% block content %}
+<h2>{{ donor.username }}'s Profile</h2>
+<p>Email: {{ donor.email }}</p>
+<p>Phone: {{ donor.phone_no }}</p>
+
+<h3>Available Donations</h3>
+<ul>
+  {% for donation in donations %}
+    <li>{{ donation.title }} - {{ donation.category }} - {{ donation.quantity }} items</li>
+  {% empty %}
+    <li>No donations posted yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

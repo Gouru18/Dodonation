@@ -1,0 +1,46 @@
+{% extends 'users/base.html' %}
+{% block content %}
+<h2>Donation Requests</h2>
+
+{% if requests %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Donation</th>
+            <th>NGO</th>
+            <th>Status</th>
+            <th>Requested At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for req in requests %}
+        <tr>
+            <td>{{ req.post.title }}</td>
+            <td>
+                <a href="{% url 'ngo_public_profile' req.receiver.id %}">
+                    {{ req.receiver.username }}
+                </a>
+            </td>
+            <td>{{ req.status }}</td>
+            <td>{{ req.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                {% if req.status == 'Pending' %}
+                <form method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ req.id }}">
+                    <button type="submit" name="action" value="accept">Accept</button>
+                    <button type="submit" name="action" value="reject">Reject</button>
+                </form>
+                {% else %}
+                    <em>{{ req.status }}</em>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No requests yet.</p>
+{% endif %}
+{% endblock %}
