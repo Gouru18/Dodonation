@@ -14,7 +14,7 @@ class DoDonationAdminSite(admin.AdminSite):
 
     class Media:
         css = {
-            'all': ('admin/custom_admin.css',)
+            'all': ('custom_admin.css','users/dodonation_admin.css',)
         }
 
 
@@ -40,7 +40,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
     def account_status_badge(self, obj):
         if obj.is_superuser:
-            return format_html('<span style="color: purple; font-weight: bold;">⭐ Superuser</span>')
+            return format_html('<span style="color: purple; font-weight: bold;"> Superuser</span>')
         elif obj.is_active:
             return format_html('<span style="color: green;">✓ Active</span>')
         return format_html('<span style="color: red;">✗ Suspended</span>')
@@ -137,6 +137,11 @@ class DonationAdmin(admin.ModelAdmin):
         queryset.delete()
         self.message_user(request, f'Deleted {count} post(s).')
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "donor":
+            kwargs["queryset"] = User.objects.filter(role="donor")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 # ---------------------- CLAIM REQUEST ADMIN ----------------------
 @admin.register(ClaimRequest)
@@ -150,6 +155,9 @@ class ClaimRequestAdmin(admin.ModelAdmin):
     def receiver_name(self, obj):
         return obj.receiver.name
 
+    model = Donation
+    verbose_name = "Donation request"
+    verbose_name_plural = "Donation requests"
 
 # ---------------------- GENERAL REVIEW ADMIN ----------------------
 @admin.register(GeneralReview)

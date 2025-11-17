@@ -25,6 +25,10 @@ class Donor(User):
 
     def __str__(self):
         return f"Donor: {self.username}"
+    
+    class Meta:
+        verbose_name = "Donor Account"
+        verbose_name_plural = "Donor Accounts"
 
 
 class Receiver(User):
@@ -36,6 +40,10 @@ class Receiver(User):
 
     def __str__(self):
         return f"Receiver: {self.name}"
+    
+    class Meta:
+        verbose_name = "NGO / Receiver"
+        verbose_name_plural = "NGOs / Receivers"
 
 class GeneralReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -60,7 +68,6 @@ class Report(models.Model):
         if self.user:
             return f'Report by {self.user.username}'
         return f'Report by {self.name}'
-
 
 CATEGORIES = [
     ('food', 'Food'),
@@ -97,6 +104,7 @@ class Donation(models.Model):
 
     def __str__(self):
         return self.title
+
     
 class ClaimRequest(models.Model):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE, related_name='claim_requests')
