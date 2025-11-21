@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-M">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodonation</title>
+    <style>
+        /* === FULL STYLE BLOCK === */
+        
+        /* Your color palette */
+        :root {
+            --dark-green: #386641;
+            --medium-green: #6A994E;
+            --light-green: #A7C957;
+            --cream: #F2E8CF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navbar using the dark green */
+        .navbar { 
+            background-color: var(--dark-green); 
+            color: white; 
+            padding: 0.5rem 1rem; /* Reduced padding for new header */
+            display: flex; /* Use flexbox for logo and links */
+            justify-content: space-between; /* Pushes logo left, links right */
+            align-items: center; /* Vertically centers everything */
+        }
+        
+        /* Logo Styling */
+        .navbar-logo img {
+            height: 50px; /* You can adjust this */
+            width: auto;
+        }
+
+        /* Nav Links */
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-links a { 
+            color: white; 
+            margin-left: 1rem; /* Use margin-left now */
+            text-decoration: none;
+        }
+        .navbar-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons using the medium green */
+        .button {
+            background-color: var(--medium-green);
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        /* Section backgrounds */
+        .section-cream {
+            background-color: var(--cream);
+            padding: 2rem;
+        }
+        
+        .section-white {
+            padding: 2rem;
+        }
+
+        /* Style for the 'Sign Up' button in the navbar */
+        .navbar-button {
+            background-color: var(--light-green); /* A7C957 */
+            color: var(--dark-green) !important; /* !important to override .navbar-links a */
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .navbar-button:hover {
+            opacity: 0.9;
+            text-decoration: none;
+        }
+
+        /* Helper to push Login/Signup to the right */
+        .navbar-right {
+            /* This is now handled by flexbox (justify-content) */
+        }
+
+        /* New Hero Section for Homepage */
+        .hero-section {
+            background-color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-text {
+            flex: 1;
+            padding-right: 2rem;
+        }
+        .hero-text h2 {
+            font-size: 2.5rem;
+            color: var(--dark-green); /* 386641 */
+        }
+        .hero-buttons .button {
+            margin: 0.5rem;
+            background-color: var(--light-green); /* A7C957 */
+            color: var(--dark-green); /* 386641 */
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .hero-image {
+            flex: 1;
+        }
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 50%; /* Makes the image circular */
+        }
+        /* === END OF STYLES === */
+    </style>
+
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="{% url 'homepage' %}" class="navbar-logo">
+                <img src="{% static 'img/logo.png' %}" alt="Dodonation Logo">
+            </a>
+
+            <div class="navbar-links">
+                {% if request.user.is_authenticated %}
+                    {% if request.user.role == 'admin' %}
+                        {% include 'core/partials/_navbar_admin.html' %}
+                    {% elif request.user.role == 'donor' %}
+                        {% include 'core/partials/_navbar_donor.html' %}
+                    {% elif request.user.role == 'ngo' %}
+                        {% include 'core/partials/_navbar_ngo.html' %}
+                    {% endif %}
+                {% else %}
+                    {% include 'core/partials/_navbar_visitor.html' %}
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="section-cream" style="text-align: center;">
+        <h3>Contact info</h3>
+        <p>&copy; 2025 Dodonation</p>
+    </footer>
+
+</body>
+</html>
