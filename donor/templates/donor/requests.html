@@ -12,10 +12,10 @@
           <div class="post-info">
             <h3>{{ post.title }}</h3>
             <p>{{ post.description|truncatewords:25 }}</p>
-            <p class="muted">Requested by: {{ post.requested_by.name }} ({{ post.requested_by.email }})</p>
+            <p class="muted">Requested by: {{ req.receiver.name }} ({{ req.receiver.email }})</p>
             <div class="btn-group">
-              <a href="{% url 'accept_request' post.id %}" class="btn">Accept</a>
-              <a href="{% url 'reject_request' post.id %}" class="btn">Reject</a>
+              <a href="{% url 'accept_request' req.id %}" class="btn">Accept</a>
+              <a href="{% url 'reject_request' req.id %}" class="btn">Reject</a>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 from django import forms
-from .models import DonationPost, ProblemReport
-from users.models import Donor
+#from .models import DonationPost, ProblemReport
+from users.models import Donor, Donation, Report
 
 class DonorEditForm(forms.ModelForm):
     class Meta:
@@ -14,7 +14,7 @@ class DonorEditForm(forms.ModelForm):
 
 class DonationPostForm(forms.ModelForm):
     class Meta:
-        model = DonationPost
+        model = Donation
         exclude = ['donor', 'requested_by', 'created_at']
         widgets = {
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
@@ -22,5 +22,5 @@ class DonationPostForm(forms.ModelForm):
 
 class ProblemReportForm(forms.ModelForm):
     class Meta:
-        model = ProblemReport
+        model = Report
         fields = ['name', 'email', 'message']

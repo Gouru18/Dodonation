@@ -16,7 +16,7 @@
     <!-- Create Donation Section -->
     <div style="background-color: #fdf6e3; padding: 1.5rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;">
         <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Create New Donation</h3>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ donation_form.as_p }}
             <button type="submit" name="create_donation" class="button" style="background-color: var(--medium-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Post Donation</button>

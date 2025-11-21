@@ -19,15 +19,15 @@
     <div class="feed-panel">
       <h2 id="your-posts">Your Posts</h2>
       <div class="posts-grid">
-        {% for post in own_posts %}
+        {% for post in donations %}
           <div class="post-card">
-            {% if post.image %}<img src="{{ post.image.url }}" alt="{{ post.title }}">{% endif %}
+            {% if post.image %}<img src="{{ donation.image.url }}" alt="{{ post.title }}">{% endif %}
             <h3>{{ post.title }}</h3>
             <p>{{ post.description|truncatewords:20 }}</p>
-            <small class="muted">{{ post.category }} | {{ post.status }}</small>
-            {% if post.is_requested and post.requested_by %}
+            <small class="muted">{{ post.category }} | {{ donation.status }}</small>
+            {% if post.is_requested and ClaimRequest %}
               <div class="btn-group">
-                <button onclick="openPopup('{{ post.requested_by.name }}', '{{ post.requested_by.email }}', '{{ post.requested_by.phone_no }}')" class="btn">View NGO</button>
+                <button onclick="openPopup('{{ ClaimRequest.name }}', '{{ ClaimRequest.email }}', '{{ ClaimRequest.phone_no }}')" class="btn">View NGO</button>
                 <a href="{% url 'accept_request' post.id %}" class="btn">Accept</a>
                 <a href="{% url 'reject_request' post.id %}" class="btn">Reject</a>
               </div>

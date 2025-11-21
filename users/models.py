@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
+#from .models import User, Receiver
+
 
 class User(AbstractUser):
     ROLE_CHOICES = [
@@ -68,7 +71,7 @@ CATEGORIES = [
     ('others', 'Others'),
 ]
 
-STATUS = [
+DONATION_STATUS = [
     ('available', 'Available'),
     ('claimed', 'Claimed'),
     ('collected', 'Collected'),
@@ -80,13 +83,17 @@ from django.utils import timezone
 class Donation(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORIES)
+    category = models.CharField(max_length=20, choices=[
+        ('food', 'Food'),
+        ('clothes', 'Clothes'),
+        ('others', 'Others'),
+    ])
     quantity = models.PositiveIntegerField()
     expiry_date = models.DateField()
     location = models.CharField(max_length=255)
-    status = models.CharField(max_length=20, choices=STATUS, default='available')
+    status = models.CharField(max_length=20, choices=DONATION_STATUS, default='available')
     date_created = models.DateTimeField(auto_now_add=True)
-    image_url = models.URLField(blank=True, null=True)
+    image = models.ImageField(upload_to='donations/', blank=True, null=True)
     donor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='donations')
 
     def save(self, *args, **kwargs):
@@ -96,16 +103,19 @@ class Donation(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.donor.username})"
+    
+REQUEST_STATUS = [
+    ('pending', 'Pending'),
+    ('accepted', 'Accepted'),
+    ('rejected', 'Rejected'),
+]
     
 class ClaimRequest(models.Model):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE, related_name='claim_requests')
     receiver = models.ForeignKey(Receiver, on_delete=models.CASCADE, related_name='requests')
-    status = models.CharField(max_length=10, choices=STATUS, default='Pending')
+    status = models.CharField(max_length=10, choices=REQUEST_STATUS, default='pending')
     date_requested = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.receiver.name} -> {self.donation.title} ({self.status})"
 
     class Meta:
         unique_together = ('donation', 'receiver')  # Prevent the same NGO requesting the same donation multiple times

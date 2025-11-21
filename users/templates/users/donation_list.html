@@ -1,3 +1,4 @@
+
 {% extends 'users/base.html' %}
 
 {% block content %}
@@ -17,9 +18,9 @@
 <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 900px; margin: 0 auto;">
 {% for donation in donations %}
   <div class="donation-card" style="display: flex; gap: 1rem; background-color: #fdf6e3; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); overflow: hidden;">
-    {% if donation.image_url %}
+    {% if donation.image %}
     <div style="flex: 0 0 300px; max-height: 300px; overflow: hidden;">
-      <img src="{{ donation.image_url }}" alt="{{ donation.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="{{ donation.image.url }}" alt="{{ donation.title }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7%;">
     </div>
     {% endif %}
 
@@ -33,6 +34,16 @@
       <p><strong>Expiry Date:</strong> {{ donation.expiry_date }}</p>
       <p><strong>Date Posted:</strong> {{ donation.date_created }}</p>
       <p><strong>Donor:</strong> <a href="{% url 'donor_public_profile' donation.donor.id %}" style="color: var(--medium-green);">{{ donation.donor.username }}</a></p>
+
+      {% if request.user.is_authenticated and request.user.role == 'ngo' %}
+        <form method="post" style="margin-top: 1rem;">
+          {% csrf_token %}
+          <input type="hidden" name="donation_id" value="{{ donation.id }}">
+          <button type="submit" class="button" style="background-color: var(--dark-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">
+            Request Donation
+          </button>
+        </form>
+      {% endif %}
     </div>
   </div>
 {% empty %}

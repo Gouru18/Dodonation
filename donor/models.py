@@ -1,4 +1,4 @@
-from django.db import models
+"""from django.db import models
 from users.models import Donor, Receiver   # import from your users app
 
 class DonationPost(models.Model):
@@ -36,4 +36,6 @@ class ProblemReport(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} - {self.email}"
+        return f"{self.name} - {self.email}"""
+
+from users.forms import DonationForm

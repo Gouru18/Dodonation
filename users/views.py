@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserSignupForm, DonorSignupForm, ReceiverSignupForm, LoginForm
-from .models import ClaimRequest, Donor, Receiver, User
+from .models import ClaimRequest, Donor, Receiver, User, Donation
+from django.db.models import Sum
 
 def donor_signup_view(request):
     if request.method == 'POST':
@@ -55,7 +56,7 @@ def login_view(request):
 
             if user:
                 # Prevent unapproved NGOs from logging in
-                if Receiver.objects.filter(id=user.id).exists() and not user.is_active:
+                if user.role == "ngo" and not user.is_active:
                     messages.info(request, "Your NGO verification is still pending.")
                     return redirect('homepage')
 
@@ -159,7 +160,13 @@ def homepage(request):
     return render(request, 'users/homepage.html', context)
 
 def about(request):
-    return render(request, 'users/about.html')
+    donation_count = Donation.objects.count()
+    total_quantity = Donation.objects.aggregate(Sum('quantity'))['quantity__sum'] or 0
+
+    return render(request, 'users/about.html', {
+        'donation_count': donation_count,
+        'total_quantity': total_quantity,
+    })
 
 
 def ngo_account_view(request):
@@ -219,8 +226,8 @@ def donation_list(request):
         receiver = request.user.receiver
 
         # Avoid duplicate claims
-        if not ClaimRequest.objects.filter(post=donation, receiver=receiver).exists():
-            ClaimRequest.objects.create(post=donation, receiver=receiver, status='Pending')
+        if not ClaimRequest.objects.filter(donation=donation, receiver=receiver).exists():
+            ClaimRequest.objects.create(donation=donation, receiver=receiver, status='pending')
             messages.success(request, "You have successfully requested this donation!")
 
         return redirect('donation_list')
@@ -269,6 +276,8 @@ def donor_profile(request):
     }
     return render(request, 'users/donor_profile.html', context)
 
+
+
 @login_required
 def edit_donation(request, donation_id):
     donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
@@ -285,9 +294,22 @@ def edit_donation(request, donation_id):
 @login_required
 def delete_donation(request, donation_id):
     donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
+    if request.method == 'POST':
+        donation.delete()
+        messages.success(request, "Donation deleted!")
+        return redirect('donor_profile')
+    else:
+        form = DonationForm(instance=donation)
+    return render(request, 'users/edit_donation.html', {'form': form})
+    # Optional: confirm screen
+    #return render(request, 'users/confirm_delete.html', {'donation': donation})
+
+"""@login_required
+def delete_donation(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
     donation.delete()
     messages.success(request, "Donation deleted!")
-    return redirect('donor_profile')
+    return redirect('donor_profile')"""
 
 @login_required
 def donation_requests(request):
@@ -299,12 +321,12 @@ def donation_requests(request):
         action = request.POST.get('action')
         req = get_object_or_404(ClaimRequest, id=req_id)
         if action == 'accept':
-            req.status = 'Accepted'
-            req.donation.status = 'claimed'
+            req.status = 'accepted'
+            req.donation.status = 'claimed'  # from Donation.STATUS
             req.donation.save()
             req.save()
         elif action == 'reject':
-            req.status = 'Rejected'
+            req.status = 'rejected'
             req.save()
         return redirect('donation_requests')
 

@@ -113,12 +113,15 @@ from .models import Donation
 class DonationForm(forms.ModelForm):
     class Meta:
         model = Donation
-        fields = ['title', 'description', 'category', 'quantity', 'expiry_date', 'location', 'image_url']
+        fields = ['title', 'description', 'category', 'quantity', 'expiry_date', 'location', 'image']
         widgets = {
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
-            'description': forms.Textarea(attrs={'rows': 4}),
-            'image_url': forms.URLInput(attrs={'placeholder': 'Enter image URL'}),
+            'description': forms.Textarea(attrs={'rows': 4}), 
         }
+#            'image': forms.URLInput(attrs={'placeholder': 'Enter image URL'}),        
+#            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+
+
 class DonorProfileForm(forms.ModelForm):
     class Meta:
         model = User

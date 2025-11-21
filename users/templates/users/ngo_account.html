@@ -1,3 +1,57 @@
+{% extends 'users/base.html' %}
+{% block content %}
+<section class="section-white">
+    <h2 style="color: var(--dark-green);">Welcome, {{ receiver.name }}</h2>
+
+    <div class="profile-summary">
+        <p><strong>Email:</strong> {{ receiver.email }}</p>
+        <p><strong>Phone:</strong> {{ receiver.phone_no }}</p>
+        <p><strong>Registration No:</strong> {{ receiver.reg_number }}</p>
+        <a href="#" class="button">Edit Profile</a>
+    </div>
+
+    <hr>
+
+    <h3 style="color: var(--medium-green);">Requests Sent</h3>
+    <ul>
+        {% for request in requests %}
+            <li>
+                <strong>{{ request.donation.title }}</strong> - Status: {{ request.status }}
+                {% if request.status == 'accepted' %}
+                    <p>Donor: {{ request.donation.donor.username }} | Contact: {{ request.donation.donor.phone_no }}</p>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No requests sent yet.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h3 style="color: var(--medium-green);">Claimed Donations</h3>
+    <ul>
+        {% for donation in claimed %}
+            <li>{{ donation.donation.title }} - {{ donation.status }}</li>
+        {% empty %}
+            <li>No claimed donations yet.</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h3 style="color: var(--medium-green);">Activity Summary</h3>
+    <p>Total Requests: {{ stats.total_requests }}</p>
+    <p>Total Donations Received: {{ stats.total_claimed }}</p>
+    <p>Success Rate: {{ stats.success_rate }}%</p>
+
+    <hr>
+
+    <a href="{% url 'donation_list' %}" class="button" style="margin-top: 2rem;">Browse Available Donations</a>
+</section>
+{% endblock %}
+
+
+<!--
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -104,7 +158,7 @@
     <ul>
         {% for request in requests %}
             <li>
-                <strong>{{ request.post.title }}</strong> - Status: {{ request.status }}
+                <strong>{{ request.donation.title }}</strong> - Status: {{ request.status }}
                 {% if request.status == 'Accepted' %}
                     <p>Donor: {{ request.post.donor.username }} | Contact: {{ request.post.donor.phone_no }}</p>
                 {% endif %}
@@ -117,7 +171,7 @@
     <h3>Claimed Donations</h3>
     <ul>
         {% for donation in claimed %}
-            <li>{{ donation.post.title }} - Status: {{ donation.status }}</li>
+            <li>{{ donation.donation.title }} - Status: {{ donation.status }}</li>
         {% empty %}
             <li>No claimed donations yet.</li>
         {% endfor %}
@@ -137,57 +191,5 @@
 </footer>
 
 </body>
-
-<!--
-{% extends 'base.html' %}
-{% block content %}
-<section class="section-white">
-    <h2 style="color: var(--dark-green);">Welcome, {{ receiver.name }}</h2>
-
-    <div class="profile-summary">
-        <p><strong>Email:</strong> {{ receiver.email }}</p>
-        <p><strong>Phone:</strong> {{ receiver.phone_no }}</p>
-        <p><strong>Registration No:</strong> {{ receiver.reg_number }}</p>
-        <a href="#" class="button">Edit Profile</a>
-    </div>
-
-    <hr>
-
-    <h3 style="color: var(--medium-green);">Requests Sent</h3>
-    <ul>
-        {% for request in requests %}
-            <li>
-                <strong>{{ request.post.title }}</strong> - {{ request.status }}
-                {% if request.status == 'Accepted' %}
-                    <p>Donor: {{ request.post.donor.username }} | Contact: {{ request.post.donor.phone_no }}</p>
-                {% endif %}
-            </li>
-        {% empty %}
-            <li>No requests sent yet.</li>
-        {% endfor %}
-    </ul>
-
-    <hr>
-
-    <h3 style="color: var(--medium-green);">Claimed Donations</h3>
-    <ul>
-        {% for donation in claimed %}
-            <li>{{ donation.post.title }} - {{ donation.status }}</li>
-        {% empty %}
-            <li>No claimed donations yet.</li>
-        {% endfor %}
-    </ul>
-
-    <hr>
-
-    <h3 style="color: var(--medium-green);">Activity Summary</h3>
-    <p>Total Requests: {{ stats.total_requests }}</p>
-    <p>Total Donations Received: {{ stats.total_claimed }}</p>
-    <p>Success Rate: {{ stats.success_rate }}%</p>
-
-    <hr>
-
-    <a href="{% url 'browse_posts' %}" class="button">Browse Available Donations</a>
-</section>
-{% endblock %}
 -->
+

@@ -10,9 +10,9 @@ def login_required_home(view_func):
         user = request.user
         # Unauthenticated users
         if not user.is_authenticated:
-            return redirect('home')
+            return redirect('homepage')
         # NGO not verified
         if user.role == 'ngo' and not user.is_verified:
-            return redirect('home')
+            return redirect('homepage')
         return view_func(request, *args, **kwargs)
     return wrapper

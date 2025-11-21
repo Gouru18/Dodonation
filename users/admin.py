@@ -116,7 +116,7 @@ class ReceiverAdmin(admin.ModelAdmin):
 
 
 # ---------------------- DONATION ADMIN ----------------------
-@admin.register(Donation)
+"""@admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
     list_display = ('title', 'donor_name', 'category', 'status', 'expiry_date', 'created_date')
     search_fields = ('title', 'description', 'donor__username')
@@ -135,11 +135,18 @@ class DonationAdmin(admin.ModelAdmin):
     def delete_inappropriate_posts(self, request, queryset):
         count = queryset.count()
         queryset.delete()
-        self.message_user(request, f'Deleted {count} post(s).')
+        self.message_user(request, f'Deleted {count} post(s).')"""
+
+@admin.register(Donation)
+class DonationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'donor', 'category', 'status', 'expiry_date', 'date_created')
+    list_filter = ('category', 'status')
+    search_fields = ('title', 'description', 'donor__username')
+    readonly_fields = ('date_created',)
 
 
 # ---------------------- CLAIM REQUEST ADMIN ----------------------
-@admin.register(ClaimRequest)
+"""@admin.register(ClaimRequest)
 class ClaimRequestAdmin(admin.ModelAdmin):
     list_display = ('donation_title', 'receiver_name', 'status', 'date_requested')
     readonly_fields = ('date_requested',)
@@ -148,7 +155,13 @@ class ClaimRequestAdmin(admin.ModelAdmin):
         return obj.donation.title
 
     def receiver_name(self, obj):
-        return obj.receiver.name
+        return obj.receiver.name"""
+@admin.register(ClaimRequest)
+class ClaimRequestAdmin(admin.ModelAdmin):
+    list_display = ('donation', 'receiver', 'status', 'date_requested')
+    list_filter = ('status',)
+    search_fields = ('donation__title', 'receiver__name')
+    readonly_fields = ('date_requested',)
 
 
 # ---------------------- GENERAL REVIEW ADMIN ----------------------

@@ -1,20 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import DonationPost
+from users.models import Donation, ClaimRequest
 from .forms import DonationPostForm, ProblemReportForm, DonorEditForm
 from users.models import Donor, Receiver
 
 @login_required
 def donor_account_view(request):
     try:
-        donor = Donor.objects.get(username=request.user.username)
+        if request.user.role != 'donor':
+            messages.error(request, "You are not authorized as a donor.")
+            return redirect('homepage')
     except Donor.DoesNotExist:
         messages.error(request, "You are not authorized as a donor.")
         return redirect('homepage')
 
     # Posts belonging to this donor
-    own_posts = DonationPost.objects.filter(donor__username=request.user.username).order_by('-created_at')
+#    own_posts = Donation.objects.filter(donor=request.user).order_by('-date_created')
+    own_posts = ClaimRequest.objects.filter(donor=request.user).order_by('-date_created')
 
     # Account page should only show the donor's own posts and profile.
     return render(request, 'donor/account.html', {'own_posts': own_posts})
@@ -65,7 +68,7 @@ def create_post_view(request):
 
 @login_required
 def edit_post_view(request, post_id):
-    post = get_object_or_404(DonationPost, id=post_id, donor__username=request.user.username)
+    post = get_object_or_404(Donation, id=post_id, donor__username=request.user.username)
     if request.method == 'POST':
         form = DonationPostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
@@ -79,31 +82,51 @@ def edit_post_view(request, post_id):
 
 @login_required
 def delete_post_view(request, post_id):
-    post = get_object_or_404(DonationPost, id=post_id, donor__username=request.user.username)
-    post.delete()
-    messages.info(request, "Post deleted successfully.")
-    return redirect('donor_account')
+    post = get_object_or_404(Donation, id=post_id, donor__username=request.user.username)
+    if request.method == 'POST':
+        post.delete()
+        messages.info(request, "Post deleted successfully.")
+        return redirect('donor_account')
+    return render(request, 'donor/confirm_delete.html', {'post': post})
 
 
 @login_required
-def accept_request_view(request, post_id):
-    post = get_object_or_404(DonationPost, id=post_id, donor__username=request.user.username)
+def accept_request_view(request, req_id):
+    req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=request.user)
+    req.status = 'accepted'
+    req.donation.status = 'claimed'
+    req.donation.save()
+    req.save()
+    messages.success(request, "Request accepted successfully.")
+    return redirect('donation_requests')
+
+"""def accept_request_view(request, post_id):
+    post = get_object_or_404(Donation, id=post_id, donor__username=request.user.username)
     post.is_accepted = True
     post.status = "Accepted"
     post.save()
     messages.success(request, "Request accepted successfully.")
     return redirect('donor_account')
+"""
 
 
 @login_required
-def reject_request_view(request, post_id):
-    post = get_object_or_404(DonationPost, id=post_id, donor__username=request.user.username)
+def reject_request_view(request, req_id):
+    req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=request.user)
+    req.status = 'rejected'
+    req.save()
+    messages.info(request, "Request rejected successfully.")
+    return redirect('donation_requests')
+
+"""def reject_request_view(request, post_id):
+    post = get_object_or_404(Donation, id=post_id, donor__username=request.user.username)
     post.is_requested = False
+    post.is_accepted = False
     post.requested_by = None
     post.status = "Available"
     post.save()
     messages.info(request, "Request rejected successfully.")
-    return redirect('donor_account')
+    return redirect('donor_account')"""
 
 
 def report_problem_view(request):
@@ -127,5 +150,6 @@ def donation_requests_view(request):
         messages.error(request, "You are not authorized as a donor.")
         return redirect('homepage')
 
-    requests = DonationPost.objects.filter(donor=donor, is_requested=True).order_by('-created_at')
+#    requests = Donation.objects.filter(donor=donor, is_requested=True).order_by('-created_at')
+    requests = ClaimRequest.objects.filter(donation__donor=request.user).order_by('-date_requested')
     return render(request, 'donor/requests.html', {'requests': requests})
