@@ -152,4 +152,25 @@ def donation_requests_view(request):
 
 #    requests = Donation.objects.filter(donor=donor, is_requested=True).order_by('-created_at')
     requests = ClaimRequest.objects.filter(donation__donor=request.user).order_by('-date_requested')
-    return render(request, 'donor/requests.html', {'requests': requests})
+    return render(request, 'donor/donation_requests.html', {'requests': requests})@login_required
+
+def donation_requests(request):
+    donor = request.user
+    # Get all claim requests for donations by this donor
+    requests = ClaimRequest.objects.filter(donation__donor=request.user).select_related('donation', 'receiver')
+
+    if request.method == 'POST':
+        req_id = request.POST.get('request_id')
+        action = request.POST.get('action')
+        req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=donor)
+        if action == 'accept':
+            req.status = 'accepted'
+            req.donation.status = 'claimed'  # from Donation.STATUS
+            req.donation.save()
+            req.save()
+        elif action == 'reject':
+            req.status = 'rejected'
+            req.save()
+        return redirect('donation_requests')
+
+    return render(request, 'users/donation_requests.html', {'requests': requests})

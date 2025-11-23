@@ -313,13 +313,14 @@ def delete_donation(request, donation_id):
 
 @login_required
 def donation_requests(request):
+    donor = request.user
     # Get all claim requests for donations by this donor
-    requests = ClaimRequest.objects.filter(donation__donor=request.user)
+    requests = ClaimRequest.objects.filter(donation__donor=request.user).select_related('donation', 'receiver')
 
     if request.method == 'POST':
         req_id = request.POST.get('request_id')
         action = request.POST.get('action')
-        req = get_object_or_404(ClaimRequest, id=req_id)
+        req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=donor)
         if action == 'accept':
             req.status = 'accepted'
             req.donation.status = 'claimed'  # from Donation.STATUS

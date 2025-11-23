@@ -1,4 +1,4 @@
-{% extends 'users/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <h2>Donation Requests</h2>
 
@@ -16,16 +16,16 @@
     <tbody>
         {% for req in requests %}
         <tr>
-            <td>{{ req.post.title }}</td>
+            <td>{{ req.donation.title }}</td>
             <td>
                 <a href="{% url 'ngo_public_profile' req.receiver.id %}">
-                    {{ req.receiver.username }}
+                    {{ req.receiver.name }}
                 </a>
             </td>
-            <td>{{ req.status }}</td>
-            <td>{{ req.created_at|date:"Y-m-d H:i" }}</td>
+            <td>{{ req.get_status_display }}</td>
+            <td>{{ req.date_requested|date:"Y-m-d H:i" }}</td>
             <td>
-                {% if req.status == 'Pending' %}
+                {% if req.status == 'pending' %}
                 <form method="POST" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="request_id" value="{{ req.id }}">
@@ -33,7 +33,7 @@
                     <button type="submit" name="action" value="reject">Reject</button>
                 </form>
                 {% else %}
-                    <em>{{ req.status }}</em>
+                    <em>{{ req.get_status_display }}</em>
                 {% endif %}
             </td>
         </tr>
@@ -44,3 +44,5 @@
 <p>No requests yet.</p>
 {% endif %}
 {% endblock %}
+
+
