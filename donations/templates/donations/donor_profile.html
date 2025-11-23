@@ -1,19 +1,61 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<h2>Profile: {{ donor.username }}</h2>
-<p>Email: {{ donor.email }}</p>
-{% if profile %}
-  <p>Contact number: {{ profile.contact_number }}</p>
-{% endif %}
-
-<h3>Donation Posts:</h3>
-{% for donation in donations %}
-  <div>
-    <strong>{{ donation.title }}</strong> ({{ donation.get_status_display }}) <br>
-    {{ donation.description }} <br>
-    Category: {{ donation.get_category_display }} | Quantity: {{ donation.quantity }} | Expiry: {{ donation.expiry_date }}
-  </div>
-{% empty %}
-  <p>No donations posted by this donor.</p>
-{% endfor %}
+<div class="donor-profile-container">
+    <div class="donor-header-card">
+        <div>
+            <h1 class="donor-title">{{ donor.username|upper }}</h1>
+            <hr>
+            <div class="donor-contact-info">
+                <p>
+                    <span class="icon-email"></span>
+                    <span>{{ donor.email }}</span>
+                </p>
+                {% if profile and profile.contact_number %}
+                <p>
+                    <span class="icon-phone"></span>
+                    <span>{{ profile.contact_number }}</span>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="donation-section">
+        <h2>DONATION POSTS</h2>
+        <div class="donation-posts-grid">
+            {% for donation in donations %}
+            <div class="donation-card-compact">
+                <div class="donation-card-header">
+                    {% if donation.category == "clothes" %}
+                        <span class="icon-category">👕</span>
+                    {% elif donation.category == "food" %}
+                        <span class="icon-category">🥗</span>
+                    {% else %}
+                        <span class="icon-category">💰</span>
+                    {% endif %}
+                    <h3>{{ donation.title }}</h3>
+                </div>
+                <div class="donation-card-details">
+                    <p>{{ donation.description }}</p>
+                    <div class="donation-meta">
+                        <span class="donation-category">{{ donation.get_category_display }}</span>
+                        <span class="donation-quantity">Qty: {{ donation.quantity }}</span>
+                    </div>
+                    <div class="donation-meta">
+                        <span class="donation-status">Status: {{ donation.get_status_display }}</span>
+                        <span class="donation-expiry">Expiry: {{ donation.expiry_date }}</span>
+                    </div>
+                    <div class="donation-meta">
+                        <span class="donation-location">📍 {{ donation.location }}</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="donation-card-compact">
+                <p>No donations yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -144,3 +144,92 @@ nav a:hover {
     z-index: 9999;
     box-shadow: 0 2px 12px rgba(60,100,44,0.10);
 }
+
+
+.donor-profile-container {
+    max-width: 750px;
+    margin: 38px auto 0 auto;
+    background: #f5f5dc;
+    border-radius: 16px;
+    box-shadow: 0 6px 22px rgba(0,0,0,.07);
+    padding: 0 0 36px 0;
+}
+.donor-header-card {
+    background: #e0f0c0;
+    border-radius: 16px 16px 0 0;
+    padding: 32px 32px 18px 32px;
+    box-shadow: 0 4px 18px rgba(46,77,43,0.07);
+    margin-bottom: 12px;
+    text-align: left;
+}
+.donor-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #2e4d2b;
+    letter-spacing: 1px;
+}
+.donor-contact-info {
+    font-size: 1.1rem;
+    color: #325827;
+    margin-top: 8px;
+}
+.donor-contact-info p {
+    margin: 3px 0;
+    display: flex;
+    align-items: center;
+}
+.icon-email::before { content: "✉️"; margin-right: 7px; }
+.icon-phone::before { content: "📞"; margin-right: 7px; }
+hr { border: none; border-top: 1px solid #cbe6a3; margin: 16px 0; }
+.donation-section { padding: 16px 32px 0 32px; }
+.donation-section h2 {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    color: #274c1d;
+    margin-bottom: 16px;
+}
+.donation-posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.donation-card-compact {
+    background: #fff;
+    border-radius: 12px;
+    border: 1.8px solid #e0f0c0;
+    box-shadow: 0 2px 9px rgba(46,77,43,0.04);
+    padding: 20px 26px;
+}
+.donation-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 7px;
+}
+.icon-category {
+    font-size: 2.2rem;
+    vertical-align: middle;
+}
+.donation-card-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #234021;
+    font-weight: 600;
+}
+.donation-card-details p {
+    margin: 5px 0 10px 0;
+    color: #274c1d;
+    font-size: 1rem;
+}
+.donation-meta {
+    display: flex;
+    gap: 20px;
+    font-size: 0.98rem;
+    color: #325827;
+    margin-bottom: 3px;
+}
+@media (max-width: 900px) {
+    .donor-profile-container { max-width: 97vw; }
+    .donor-header-card, .donation-section { padding: 14px 9vw; }
+}
