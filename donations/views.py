@@ -26,7 +26,6 @@ def donation_list(request):
 def donor_profile(request, donor_id):
     donor_profile = get_object_or_404(DonorProfile, id=donor_id)
     donations = donor.donations.all()
-    # Assume UserProfile is linked to User model using OneToOneField
     profile = getattr(donor, 'userprofile', None)
     return render(request, 'donations/donor_profile.html', {
         'donor': donor,
