@@ -14,7 +14,7 @@ class DoDonationAdminSite(admin.AdminSite):
 
     class Media:
         css = {
-            'all': ('admin/custom_admin.css',)
+            'all': ('custom_admin.css','users/dodonation_admin.css',)
         }
 
 
@@ -40,7 +40,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
     def account_status_badge(self, obj):
         if obj.is_superuser:
-            return format_html('<span style="color: purple; font-weight: bold;">⭐ Superuser</span>')
+            return format_html('<span style="color: purple; font-weight: bold;"> Superuser</span>')
         elif obj.is_active:
             return format_html('<span style="color: green;">✓ Active</span>')
         return format_html('<span style="color: red;">✗ Suspended</span>')
@@ -116,7 +116,7 @@ class ReceiverAdmin(admin.ModelAdmin):
 
 
 # ---------------------- DONATION ADMIN ----------------------
-"""@admin.register(Donation)
+@admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
     list_display = ('title', 'donor_name', 'category', 'status', 'expiry_date', 'created_date')
     search_fields = ('title', 'description', 'donor__username')
@@ -135,18 +135,16 @@ class DonationAdmin(admin.ModelAdmin):
     def delete_inappropriate_posts(self, request, queryset):
         count = queryset.count()
         queryset.delete()
-        self.message_user(request, f'Deleted {count} post(s).')"""
+        self.message_user(request, f'Deleted {count} post(s).')
 
-@admin.register(Donation)
-class DonationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'donor', 'category', 'status', 'expiry_date', 'date_created')
-    list_filter = ('category', 'status')
-    search_fields = ('title', 'description', 'donor__username')
-    readonly_fields = ('date_created',)
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "donor":
+            kwargs["queryset"] = User.objects.filter(role="donor")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 # ---------------------- CLAIM REQUEST ADMIN ----------------------
-"""@admin.register(ClaimRequest)
+@admin.register(ClaimRequest)
 class ClaimRequestAdmin(admin.ModelAdmin):
     list_display = ('donation_title', 'receiver_name', 'status', 'date_requested')
     readonly_fields = ('date_requested',)
@@ -155,14 +153,11 @@ class ClaimRequestAdmin(admin.ModelAdmin):
         return obj.donation.title
 
     def receiver_name(self, obj):
-        return obj.receiver.name"""
-@admin.register(ClaimRequest)
-class ClaimRequestAdmin(admin.ModelAdmin):
-    list_display = ('donation', 'receiver', 'status', 'date_requested')
-    list_filter = ('status',)
-    search_fields = ('donation__title', 'receiver__name')
-    readonly_fields = ('date_requested',)
+        return obj.receiver.name
 
+    model = Donation
+    verbose_name = "Donation request"
+    verbose_name_plural = "Donation requests"
 
 # ---------------------- GENERAL REVIEW ADMIN ----------------------
 @admin.register(GeneralReview)

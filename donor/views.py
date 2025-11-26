@@ -100,16 +100,6 @@ def accept_request_view(request, req_id):
     messages.success(request, "Request accepted successfully.")
     return redirect('donation_requests')
 
-"""def accept_request_view(request, post_id):
-    post = get_object_or_404(Donation, id=post_id, donor__username=request.user.username)
-    post.is_accepted = True
-    post.status = "Accepted"
-    post.save()
-    messages.success(request, "Request accepted successfully.")
-    return redirect('donor_account')
-"""
-
-
 @login_required
 def reject_request_view(request, req_id):
     req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=request.user)
@@ -117,16 +107,6 @@ def reject_request_view(request, req_id):
     req.save()
     messages.info(request, "Request rejected successfully.")
     return redirect('donation_requests')
-
-"""def reject_request_view(request, post_id):
-    post = get_object_or_404(Donation, id=post_id, donor__username=request.user.username)
-    post.is_requested = False
-    post.is_accepted = False
-    post.requested_by = None
-    post.status = "Available"
-    post.save()
-    messages.info(request, "Request rejected successfully.")
-    return redirect('donor_account')"""
 
 
 def report_problem_view(request):
@@ -152,7 +132,7 @@ def donation_requests_view(request):
 
 #    requests = Donation.objects.filter(donor=donor, is_requested=True).order_by('-created_at')
     requests = ClaimRequest.objects.filter(donation__donor=request.user).order_by('-date_requested')
-    return render(request, 'donor/donation_requests.html', {'requests': requests})@login_required
+    return render(request, 'donor/donation_requests.html', {'requests': requests})
 
 def donation_requests(request):
     donor = request.user

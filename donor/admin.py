@@ -1,4 +1,4 @@
-"""from django.contrib import admin
+from django.contrib import admin
 from users.models import Donation, Problem, ClaimRequest
 
 @admin.register(Donation)
@@ -51,4 +51,4 @@ class ProblemReportAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "created_at")
     search_fields = ("name", "email")
     readonly_fields = ("created_at",)
-    """
+    

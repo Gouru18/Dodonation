@@ -4,6 +4,7 @@
     <li class="nav-left"><a class="nav-link" href="{% url 'homepage' %}">Home</a></li>
     {% if user.is_authenticated %}
       <li><a class="nav-link" href="{% url 'donor_account' %}">Account</a></li>
+      <li><a class= "nav-link" href="{% url 'donor_profile' %}" class="button">Donate</a></li>
       <li><a class="nav-link" href="{% url 'report_problem' %}">Report</a></li>
       <li>
         <form method="post" action="{% url 'logout' %}" class="logout-form">
