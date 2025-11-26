@@ -139,5 +139,6 @@ def donor_public_profile(request, donor_id):
 """
 
 def donor_public_profile(request, donor_id):
-    donor_profile = get_object_or_404(DonorProfile, id=donor_id)
+    #donor_profile = get_object_or_404(DonorProfile, id=donor_id)
+    donor_profile = get_object_or_404(DonorProfile, donorID=donor_id)
     return render(request, 'donor/public_profile.html', {'donor_profile': donor_profile})
