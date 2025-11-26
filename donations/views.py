@@ -24,7 +24,8 @@ def donation_list(request):
 
 
 def donor_profile(request, donor_id):
-    donor = get_object_or_404(User, pk=donor_id)
+    #donor = get_object_or_404(User, pk=donor_id)
+    donor = get_object_or_404(DonorProfile, user_id=donor_id)
     donations = donor.donations.all()
     # Assume UserProfile is linked to User model using OneToOneField
     profile = getattr(donor, 'userprofile', None)
