@@ -1,0 +1,16 @@
+/* Donor page styles (feed, cards, profile panel) */
+.account-wrapper{ display:flex; gap:24px; align-items:flex-start; }
+.profile-panel{ width:300px; background:rgba(255,255,255,0.03); padding:18px; border-radius:8px; }
+.profile-panel h2{ margin-top:0; color:var(--beige-100); }
+.profile-panel p{ color:#e6e6e6; margin:8px 0; }
+.feed-panel{ flex:1; }
+.feed-grid, .posts-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px; }
+.feed-card, .post-card{ background:rgba(255,255,255,0.02); border-radius:8px; padding:12px; }
+.feed-card img, .post-card img{ width:100%; height:auto; border-radius:6px; display:block; margin-bottom:8px; }
+.btn-create{ background:var(--beige-300); color:#111; padding:8px 12px; border-radius:8px; text-decoration:none; }
+.btn-group{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+
+.popup{ position:fixed; left:0; top:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); }
+.popup-content{ background:var(--beige-100); color:#111; padding:16px; border-radius:8px; min-width:260px; }
+
+@media (max-width:900px){ .account-wrapper{ flex-direction:column; } .profile-panel{ width:100%; } }

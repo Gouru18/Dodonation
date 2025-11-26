@@ -1,0 +1,81 @@
+button,
+.btn,
+input[type="submit"] {
+  background-color: #FFD700; 
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover,
+.btn:hover,
+input[type="submit"]:hover {
+  background-color: #ffcc00; 
+}
+
+.highlight {
+  background-color: #fff8cc; 
+}
+
+/* Account / Feed layout */
+.account-wrapper { display:flex; gap:24px; }
+.profile-panel { width:260px; background:#1f1f1f; padding:16px; border-radius:6px; }
+.profile-panel h2 { margin-top:0; }
+.profile-panel p { margin:8px 0; }
+.feed-panel { flex:1; }
+.feed-grid, .posts-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:16px; }
+.feed-card, .post-card { background:#161616; border-radius:6px; padding:12px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+.feed-card img, .post-card img { max-width:100%; height:auto; border-radius:4px; display:block; margin-bottom:8px; }
+.btn { display:inline-block; margin:6px 6px 6px 0; }
+.btn-create { background:#ffd54f; padding:8px 12px; border-radius:4px; text-decoration:none; color:#000; }
+.btn-group { margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+
+/* Popup */
+.popup { position:fixed; left:0; top:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); }
+.popup-content { background:#fff; color:#000; padding:16px; border-radius:6px; min-width:280px; }
+
+/* Messages */
+.messages { margin:12px 0; }
+.messages ul { list-style:disc; padding-left:20px; }
+.messages li { background:#0b0b0b; padding:8px 12px; border-radius:4px; margin-bottom:6px; }
+
+@media (max-width:800px) {
+  .account-wrapper { flex-direction:column; }
+  .profile-panel { width:100%; }
+}
+
+/* Navbar (base) */
+.navbar { background: linear-gradient(90deg,#2e8f4a,#1f6f3a); padding:14px 18px; }
+.navbar .navbar-nav { list-style:none; margin:0; padding:0; display:flex; gap:18px; align-items:center; }
+.navbar .navbar-nav li { margin:0; }
+.navbar .nav-link { color:#fff; text-decoration:none; padding:6px 8px; display:inline-block; font-weight:600; }
+.navbar .nav-link:hover { opacity:0.9; text-decoration:underline; }
+.navbar .nav-item span.nav-link { cursor:default; }
+
+/* Page container */
+.container { max-width:1100px; margin:20px auto; padding:0 16px; }
+
+/* Cards and typography */
+.feed-card h3, .post-card h3 { margin:8px 0; color:#fff; font-size:1.05rem; }
+.feed-card p, .post-card p { color:#ccc; font-size:0.95rem; }
+.feed-card small, .post-card small { color:#999; display:block; margin-top:6px; }
+
+/* Forms (create/edit) */
+.form-wrapper { background:#0f0f10; padding:18px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); }
+.form-wrapper label { display:block; margin-bottom:6px; color:#ddd; font-weight:600; }
+.form-wrapper input[type="text"], .form-wrapper textarea, .form-wrapper select, .form-wrapper input[type="number"], .form-wrapper input[type="date"] {
+  width:100%; padding:10px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:#232325; color:#eee; margin-bottom:12px;
+}
+.form-wrapper input[type="file"] { color:#ddd; margin-top:6px; }
+.form-wrapper button { display:inline-block; }
+
+/* Small tweaks */
+.btn-create { background:#ffd54f; color:#111; font-weight:700; }
+.btn { background:#ffd54f; color:#111; }
+
+@media (max-width:600px) {
+  .navbar .navbar-nav { flex-direction:column; gap:8px; align-items:flex-start; }
+}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ ngo.name }} ({{ ngo.username }})</h2>
+<p>Email: {{ ngo.email }}</p>
+<p>Phone: {{ ngo.phone_no }}</p>
+<p>Registration Number: {{ ngo.reg_number }}</p>
+
+<h3>Donations Requested</h3>
+<table>
+    <tr>
+        <th>Donation Title</th>
+        <th>Status</th>
+    </tr>
+    {% for req in requests_made %}
+    <tr>
+        <td>{{ req.donation.title }}</td>
+        <td>{{ req.status }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">No requests yet.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,9 @@
+/* User forms (login/signup) themed */
+.form-container{ background:linear-gradient(180deg,var(--beige-100),var(--beige-300)); color:#111; padding:22px; border-radius:10px; width:680px; margin:28px auto; box-shadow:0 8px 24px rgba(0,0,0,0.25); text-align:left; }
+.form-container h2{ color:var(--green-700); text-align:center; margin-bottom:18px; }
+.form-container label{ display:block; text-align:left; font-weight:600; margin-bottom:6px; }
+.form-container input, .form-container select, .form-container textarea{ padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); width:100%; margin-bottom:12px; box-sizing:border-box; word-break:break-word; overflow-wrap:break-word; background:#222; color:#e6e6e6; }
+.form-container textarea{ resize:vertical; min-height:180px; max-width:100%; overflow:auto; }
+.form-container button{ background:var(--green-700); color:var(--beige-100); padding:10px 14px; border-radius:8px; border:none; width:100%; cursor:pointer; font-weight:600; }
+
+@media (max-width:920px){ .form-container{ width:92%; padding:16px; } }
