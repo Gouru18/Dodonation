@@ -1,12 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import User, Donor, Receiver, GeneralReview, Report, Donation, ClaimRequest
+from .models import User
 
+"""
 # --- Custom Admin Site Settings ---
 admin.site.site_header = "DoDonation Administration"
 admin.site.site_title = "DoDonation Admin"
-admin.site.index_title = "Welcome to DoDonation Admin Panel"
+admin.site.index_title = "Welcome to DoDonation Admin Panel
+"""
 
+
+"""
 class DoDonationAdminSite(admin.AdminSite):
     site_header = "DoDonation Administration"
     site_title = "DoDonation Admin"
@@ -16,12 +20,8 @@ class DoDonationAdminSite(admin.AdminSite):
         css = {
             'all': ('admin/custom_admin.css',)
         }
-
-
-# Apply custom admin
-admin.site.__class__ = DoDonationAdminSite
-
-
+"""
+"""
 # ---------------------- USER ADMIN ----------------------
 @admin.register(User)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -55,67 +55,18 @@ class CustomUserAdmin(admin.ModelAdmin):
     def activate_account(self, request, queryset):
         updated = queryset.update(is_active=True)
         self.message_user(request, f'✓ Activated {updated} account(s).')
+"""
+
+# Apply custom admin
+#admin.site.__class__ = DoDonationAdminSite
 
 
-# ---------------------- DONOR ADMIN ----------------------
-@admin.register(Donor)
-class DonorAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'phone_no', 'is_active', 'date_joined')
-    list_filter = ('is_active', 'date_joined')
-    search_fields = ('username', 'email')
-    readonly_fields = ('donorID', 'date_joined')
-
-    actions = ['suspend_donors', 'activate_donors']
-
-    def suspend_donors(self, request, queryset):
-        updated = queryset.update(is_active=False)
-        self.message_user(request, f'✗ Suspended {updated} donor(s).')
-
-    def activate_donors(self, request, queryset):
-        updated = queryset.update(is_active=True)
-        self.message_user(request, f'✓ Activated {updated} donor(s).')
 
 
-# ---------------------- RECEIVER ADMIN (NGO) ----------------------
-@admin.register(Receiver)
-class ReceiverAdmin(admin.ModelAdmin):
-    list_display = ('username', 'name', 'email', 'reg_number', 'is_validated', 'is_confirmed', 'is_active', 'date_joined')
-    list_filter = ('is_validated', 'is_confirmed', 'is_active')
-    search_fields = ('username', 'email', 'name', 'reg_number')
-
-    fieldsets = (
-        ('NGO Information', {'fields': ('username', 'email', 'name', 'reg_number', 'phone_no')}),
-        ('Validation', {'fields': ('is_validated', 'is_confirmed')}),
-        ('Account Status', {'fields': ('is_active',)}),
-        ('Important Dates', {'fields': ('date_joined', 'last_login')}),
-    )
-
-    readonly_fields = ('receiverID', 'date_joined', 'last_login', 'username')
-    actions = ['validate_ngo_existence', 'confirm_ngo_registration', 'approve_and_activate_ngo', 'reject_ngo', 'suspend_ngo']
-
-    def validate_ngo_existence(self, request, queryset):
-        updated = queryset.update(is_validated=True)
-        self.message_user(request, f'✓ Validated {updated} NGO(s).')
-
-    def confirm_ngo_registration(self, request, queryset):
-        updated = queryset.update(is_confirmed=True)
-        self.message_user(request, f'✓ Confirmed {updated} NGO(s).')
-
-    def approve_and_activate_ngo(self, request, queryset):
-        updated = queryset.update(is_validated=True, is_confirmed=True, is_active=True)
-        self.message_user(request, f'✓ Approved & activated {updated} NGO(s).')
-
-    def reject_ngo(self, request, queryset):
-        count = queryset.count()
-        queryset.delete()
-        self.message_user(request, f'✗ Deleted {count} NGO(s).')
-
-    def suspend_ngo(self, request, queryset):
-        updated = queryset.update(is_active=False)
-        self.message_user(request, f'✗ Suspended {updated} NGO(s).')
 
 
-# ---------------------- DONATION ADMIN ----------------------
+   
+
 """@admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
     list_display = ('title', 'donor_name', 'category', 'status', 'expiry_date', 'created_date')
@@ -137,67 +88,3 @@ class DonationAdmin(admin.ModelAdmin):
         queryset.delete()
         self.message_user(request, f'Deleted {count} post(s).')"""
 
-@admin.register(Donation)
-class DonationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'donor', 'category', 'status', 'expiry_date', 'date_created')
-    list_filter = ('category', 'status')
-    search_fields = ('title', 'description', 'donor__username')
-    readonly_fields = ('date_created',)
-
-
-# ---------------------- CLAIM REQUEST ADMIN ----------------------
-"""@admin.register(ClaimRequest)
-class ClaimRequestAdmin(admin.ModelAdmin):
-    list_display = ('donation_title', 'receiver_name', 'status', 'date_requested')
-    readonly_fields = ('date_requested',)
-
-    def donation_title(self, obj):
-        return obj.donation.title
-
-    def receiver_name(self, obj):
-        return obj.receiver.name"""
-@admin.register(ClaimRequest)
-class ClaimRequestAdmin(admin.ModelAdmin):
-    list_display = ('donation', 'receiver', 'status', 'date_requested')
-    list_filter = ('status',)
-    search_fields = ('donation__title', 'receiver__name')
-    readonly_fields = ('date_requested',)
-
-
-# ---------------------- GENERAL REVIEW ADMIN ----------------------
-@admin.register(GeneralReview)
-class GeneralReviewAdmin(admin.ModelAdmin):
-    list_display = ('review_author', 'email', 'message_preview', 'created_at')
-    readonly_fields = ('created_at',)
-    actions = ['delete_inappropriate_reviews']
-
-    def review_author(self, obj):
-        if obj.user:
-            return f"{obj.user.username} (User)"
-        return f"{obj.name} (Anonymous)"
-
-    def message_preview(self, obj):
-        return obj.message[:100] + "..." if len(obj.message) > 100 else obj.message
-
-    def delete_inappropriate_reviews(self, request, queryset):
-        count = queryset.count()
-        queryset.delete()
-        self.message_user(request, f'Deleted {count} review(s).')
-
-
-# ---------------------- REPORT ADMIN ----------------------
-@admin.register(Report)
-class ReportAdmin(admin.ModelAdmin):
-    list_display = ('report_author', 'email', 'message', 'created_at')
-    readonly_fields = ('created_at',)
-
-    def report_author(self, obj):
-        if obj.user:
-            return f"{obj.user.username} (User ID: {obj.user.id})"
-        return obj.name
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False

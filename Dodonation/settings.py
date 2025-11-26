@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'donor',
+    'ngo',
+    'core',
 ]
 
 AUTH_USER_MODEL = 'users.User'

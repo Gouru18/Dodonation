@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-M">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodonation</title>
+    <style>
+        /* === FULL STYLE BLOCK === */
+
+        :root {
+            --dark-green: #386641;
+            --medium-green: #6A994E;
+            --light-green: #A7C957;
+            --cream: #F2E8CF;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* ---------------------- NAVBAR FIX ---------------------- */
+
+        .navbar {
+            background-color: var(--dark-green);
+            color: white;
+            padding: 1rem;
+
+            display: flex;
+            justify-content: space-between; /* logo left, buttons right */
+            align-items: center;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem; /* space between logo and links */
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem; /* space between login & signup */
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        /* prevent underline on logo */
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .navbar-logo {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+
+        /* ---------------------- BUTTONS ---------------------- */
+
+        .button {
+            background-color: var(--medium-green);
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .navbar-button {
+            background-color: var(--light-green);
+            color: var(--dark-green);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .navbar-button:hover {
+            opacity: 0.9;
+            text-decoration: none;
+        }
+
+        /* ---------------------- SECTIONS ---------------------- */
+
+        .section-cream {
+            background-color: var(--cream);
+            padding: 2rem;
+        }
+
+        .section-white {
+            padding: 2rem;
+        }
+
+        /* ---------------------- HERO ---------------------- */
+
+        .hero-section {
+            background-color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-text {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .hero-text h2 {
+            font-size: 2.5rem;
+            color: var(--dark-green);
+        }
+
+        .hero-buttons .button {
+            margin: 0.5rem;
+            background-color: var(--light-green);
+            color: var(--dark-green);
+            font-weight: bold;
+        }
+
+        .hero-image {
+            flex: 1;
+            margin-left: 10%;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 50%;
+        }
+        /* Donation post cards */
+.donation-card, .form-container, .card {
+    background-color: #e0f0c0; /* light green */
+    padding: 28px 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.14);
+    margin-bottom: 30px;
+    word-break: break-word;
+}
+
+.donation-card a {
+    color: #2e4d2b;
+    text-decoration: underline;
+}
+
+.donation-card p {
+    margin-bottom: 10px;
+}
+
+.donation-card p strong {
+    color: #234021;
+    font-size: 15px;
+}
+
+
+        /* === END OF STYLES === */
+    </style>
+</head>
+
+<body>
+
+    <header>
+        {% if request.user.is_authenticated %}
+            {% if request.user.role == 'donor' %}
+                {% include 'donor/_navbar_donor.html' %}
+            {% elif request.user.role == 'ngo' %}
+                {% include 'ngo/_navbar_ngo.html' %}
+            {% else %}
+                {% include 'users/_navbar_visitor.html' %}
+            {% endif %}
+        {% else %}
+            {% include 'users/_navbar_visitor.html' %}
+        {% endif %}
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="section-cream" style="text-align: center;">
+        <p>&copy; 2025 Dodonation</p>
+    </footer>
+
+</body>
+
+</html>

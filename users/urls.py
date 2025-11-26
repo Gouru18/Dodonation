@@ -1,3 +1,4 @@
+"""
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from . import views
@@ -22,4 +23,16 @@ urlpatterns = [
     path('donor_public_profile/<int:donor_id>/', views.donor_public_profile, name='donor_public_profile'),
     path('donation/edit/<int:donation_id>/', views.edit_donation, name='edit_donation'),
     path('donation/delete/<int:donation_id>/', views.delete_donation, name='delete_donation'),
+]
+"""
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('select-role/', views.select_role_view, name='select_role'),
+    path('', views.homepage, name='homepage'),
+    path('about/', views.about, name='about'),
 ]

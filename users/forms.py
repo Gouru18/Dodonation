@@ -1,7 +1,19 @@
+"""
+Docstring for users.forms
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from .models import User, Donor, Receiver
+import re
+"""
+
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ValidationError
+from users.models import User
+from donor.models import DonorProfile
+from ngo.models import NGOProfile
+from core.models import GeneralReview, Report, Donation
 import re
 
 # -------------------------
@@ -40,22 +52,24 @@ class UserSignupForm(forms.ModelForm):
 # -------------------------
 # Donor Signup Form
 # -------------------------
+"""
 class DonorSignupForm(UserSignupForm):
     class Meta(UserSignupForm.Meta):
-        model = Donor
+        model = User
+        fields = UserSignupForm.Meta.fields + ['organization_name']
 
 
 # -------------------------
 # Receiver (NGO) Signup Form
 # -------------------------
-class ReceiverSignupForm(UserSignupForm):
+class NGOSignupForm(UserSignupForm):
     name = forms.CharField(max_length=100, label="NGO Name")
     reg_number = forms.CharField(max_length=50, label="Registration Number")
 
     class Meta(UserSignupForm.Meta):
-        model = Receiver
+        model = NGOProfile
         fields = UserSignupForm.Meta.fields + ['name', 'reg_number']
-
+"""
 
 # -------------------------
 # Login Form
@@ -70,7 +84,8 @@ class LoginForm(AuthenticationForm):
         label="Password"
     )
 
-from .models import GeneralReview
+"""
+from core.models import GeneralReview
 
 class ReviewForm(forms.ModelForm):
     class Meta:
@@ -96,7 +111,7 @@ class ReportForm(forms.ModelForm):
     # Validate email format
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        email_pattern = "m@gmail.com"
         if not re.match(email_pattern, email):
             raise ValidationError("Please enter a valid email address.")
         return email
@@ -118,11 +133,15 @@ class DonationForm(forms.ModelForm):
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 4}), 
         }
-#            'image': forms.URLInput(attrs={'placeholder': 'Enter image URL'}),        
-#            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+
 
 
 class DonorProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'phone_no']
+
+
+#            'image': forms.URLInput(attrs={'placeholder': 'Enter image URL'}),        
+#            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+"""

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 900px; margin: 2rem auto; padding: 1rem;">
+    <h2 style="text-align: center; color: var(--dark-green); margin-bottom: 2rem;">Donor Dashboard</h2>
+
+    <!-- Profile Section -->
+    <div style="background-color: #fdf6e3; padding: 1.5rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+        <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Edit Profile</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ profile_form.as_p }}
+            <button type="submit" name="update_profile" class="button" style="background-color: var(--dark-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Update Profile</button>
+        </form>
+    </div>
+
+    <!-- Create Donation Section -->
+    <div style="background-color: #fdf6e3; padding: 1.5rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+        <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Create New Donation</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ donation_form.as_p }}
+            <button type="submit" name="create_donation" class="button" style="background-color: var(--medium-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Post Donation</button>
+        </form>
+    </div>
+
+    <!-- Donations Table -->
+    <div style="overflow-x: auto; background-color: #fdf6e3; padding: 1rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
+        <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Your Donations</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background-color: var(--dark-green); color: white;">
+                <tr>
+                    <th style="padding: 0.5rem;">Image</th>
+                    <th style="padding: 0.5rem;">Title</th>
+                    <th style="padding: 0.5rem;">Category</th>
+                    <th style="padding: 0.5rem;">Quantity</th>
+                    <th style="padding: 0.5rem;">Status</th>
+                    <th style="padding: 0.5rem;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donation in donations %}
+                <tr style="text-align: center; border-bottom: 1px solid #ddd;">
+                    <td style="padding: 0.5rem;">
+                        {% if donation.image_url %}
+                            <img src="{{ donation.image_url }}" alt="{{ donation.title }}" style="width:80px; height:auto; border-radius:4px;">
+                        {% else %}
+                            No image
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.5rem;">{{ donation.title }}</td>
+                    <td style="padding: 0.5rem;">{{ donation.category|title }}</td>
+                    <td style="padding: 0.5rem;">{{ donation.quantity }}</td>
+                    <td style="padding: 0.5rem;">
+                        {% if donation.status == 'available' %}
+                            <span style="color: green; font-weight: bold;">{{ donation.status|title }}</span>
+                        {% elif donation.status == 'claimed' %}
+                            <span style="color: orange; font-weight: bold;">{{ donation.status|title }}</span>
+                        {% elif donation.status == 'expired' %}
+                            <span style="color: red; font-weight: bold;">{{ donation.status|title }}</span>
+                        {% else %}
+                            {{ donation.status|title }}
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.5rem;">
+                        <a href="{% url 'edit_donation' donation.id %}" style="margin-right: 0.5rem; color: var(--medium-green); text-decoration: none; font-weight: bold;">Edit</a>
+                        <a href="{% url 'delete_donation' donation.id %}" style="margin-right: 0.5rem; color: red; text-decoration: none; font-weight: bold;">Delete</a>
+                        <a href="{% url 'donation_requests'  %}" style="color: var(--dark-green); text-decoration: none; font-weight: bold;">Requests</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 1rem;">No donations yet. Create one above!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -24,7 +24,22 @@ urlpatterns = [
     path('', include('users.urls')),
     path('donor/', include('donor.urls')),
 
+#    path("admin/", admin.site.urls),
+
+    # Users (auth, profiles, role selection)
+    path('users/', include('users.urls')),
+
+    # Donor-specific actions (create posts, manage requests)
+    path("donor/", include("donor.urls")),
+
+    # NGO-specific actions (request donations, manage account)
+    path("ngo/", include("ngo.urls")),
+
+    # Core donation logic (listings, reviews, etc.)
+    path("donations/", include("core.urls")),
+
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
