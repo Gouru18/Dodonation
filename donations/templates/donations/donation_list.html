@@ -22,7 +22,7 @@
     <p>Location: {{ donation.location }}</p>
     <p>Expiry Date: {{ donation.expiry_date }}</p>
     <p>Date Posted: {{ donation.date_created }}</p>
-    <p>Donor: <a href="{% url 'donor_profile' donation.donor.id %}">{{ donation.donor.username }}</a></p>
+    <p>Donor: <a href="{% url 'donor_profile' donation.user.id %}">{{ donation.donor.username }}</a></p>
   </div>
 {% empty %}
   <div class="form-container"><p>No donations found.</p></div>
