@@ -79,7 +79,8 @@ def donor_profile(request):
 
 @login_required
 def edit_donation(request, donation_id):
-    donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
+    donor_profile = getattr(request.user, 'donor_profile', None)
+    donation = get_object_or_404(Donation, id=donation_id, donor=donor_profile)
     if request.method == 'POST':
         form = DonationForm(request.POST, request.FILES, instance=donation)
         if form.is_valid():
@@ -92,7 +93,8 @@ def edit_donation(request, donation_id):
 
 @login_required
 def delete_donation(request, donation_id):
-    donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
+    donor_profile = getattr(request.user, 'donor_profile', None)
+    donation = get_object_or_404(Donation, id=donation_id, donor=donor_profile)
     if request.method == 'POST':
         donation.delete()
         messages.success(request, "Donation deleted!")
@@ -139,5 +141,9 @@ def donor_public_profile(request, donor_id):
 """
 
 def donor_public_profile(request, donor_id):
-    donor_profile = get_object_or_404(DonorProfile, id=donor_id)
-    return render(request, 'donor/public_profile.html', {'donor_profile': donor_profile})
+    # DonorProfile uses `donorID` as the primary key field; use pk lookup to support different PK names.
+    donor_profile = get_object_or_404(DonorProfile, pk=donor_id)
+    # include donations for this donor (optionally filter by availability)
+    donations = donor_profile.donations.all()
+    # use the existing template `donor/donor_public_profile.html` and pass the expected context
+    return render(request, 'donor/donor_public_profile.html', {'donor': donor_profile.user, 'donations': donations})

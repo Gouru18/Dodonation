@@ -10,10 +10,10 @@
       <p><strong>Email:</strong> {{ user.email }}</p>
       <p><strong>Contact:</strong> {{ user.phone_no }}</p>
       <div class="btn-group">
-        <a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>
-        <a href="#your-posts" id="managePostsBtn" class="btn btn-delete">Delete Post</a>
-        <a href="{% url 'create_post' %}" class="btn btn-create">+ Create Post</a>
-        <a href="{% url 'donation_requests' %}" class="btn">Requests</a>
+        <a href="{% url 'edit_profile' %}" class="btn btn-warning">Edit Profile</a>
+        <a href="#your-posts" id="managePostsBtn" class="btn btn-danger">Delete Post</a>
+        <a href="{% url 'create_post' %}" class="btn btn-success">+ Create Post</a>
+        <a href="{% url 'donation_requests' %}" class="btn btn-success">Requests</a>
       </div>
     </div>
     <div class="feed-panel">
@@ -28,13 +28,13 @@
             {% if post.is_requested and ClaimRequest %}
               <div class="btn-group">
                 <button onclick="openPopup('{{ ClaimRequest.name }}', '{{ ClaimRequest.email }}', '{{ ClaimRequest.phone_no }}')" class="btn">View NGO</button>
-                <a href="{% url 'accept_request' post.id %}" class="btn">Accept</a>
-                <a href="{% url 'reject_request' post.id %}" class="btn">Reject</a>
+                <a href="{% url 'accept_request' post.id %}" class="btn btn-success">Accept</a>
+                <a href="{% url 'reject_request' post.id %}" class="btn btn-danger">Reject</a>
               </div>
             {% endif %}
             <div class="btn-group">
-              <a href="{% url 'edit_post' post.id %}" class="btn">Edit</a>
-              <a href="{% url 'delete_post' post.id %}" class="btn">Delete</a>
+              <a href="{% url 'edit_post' post.id %}" class="btn btn-warning">Edit</a>
+              <a href="{% url 'delete_post' post.id %}" class="btn btn-danger">Delete</a>
             </div>
           </div>
         {% empty %}
@@ -51,7 +51,7 @@
       <p id="ngoName"></p>
       <p id="ngoEmail"></p>
       <p id="ngoPhone"></p>
-      <button onclick="closePopup()" class="btn">Close</button>
+      <button onclick="closePopup()" class="btn btn-secondary">Close</button>
     </div>
   </div>
 

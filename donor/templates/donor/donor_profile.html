@@ -4,10 +4,13 @@
     <h2 style="text-align: center; color: var(--dark-green); margin-bottom: 2rem;">Donor Dashboard</h2>
 
     <!-- Profile Section -->
-    <div style="background-color: #fdf6e3; padding: 1.5rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+    <div class="form-wrapper" style="margin-bottom: 2rem;">
         <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Edit Profile</h3>
         <form method="POST">
             {% csrf_token %}
+            <h4>Account</h4>
+            {{ user_form.as_p }}
+            <h4>Donor Details</h4>
             {{ profile_form.as_p }}
             <button type="submit" name="update_profile" class="button" style="background-color: var(--dark-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Update Profile</button>
         </form>

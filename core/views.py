@@ -11,7 +11,7 @@ def donation_list(request):
     donations = Donation.objects.all()
 
     if query:
-        donations = donations.filter(Q(title__icontains=query) | Q(donor__username__icontains=query))
+        donations = donations.filter(Q(title__icontains=query) | Q(donor__user__username__icontains=query))
     if category:
         donations = donations.filter(category=category)
 

@@ -1,15 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{ donor.username }}'s Profile</h2>
-<p>Email: {{ donor.email }}</p>
-<p>Phone: {{ donor.phone_no }}</p>
+<section class="section-white" style="max-width:900px; margin:1.5rem auto; padding:16px;">
+  <div class="row align-items-center mb-3">
+    <div class="col-auto">
+      <div class="rounded bg-light d-flex align-items-center justify-content-center" style="width:88px; height:88px; color:var(--green-700); font-weight:700;">{{ donor.username|slice:":1"|upper }}</div>
+    </div>
+    <div class="col">
+      <h2 class="mb-0" style="color:var(--green-700);">{{ donor.username }}</h2>
+      <p class="text-muted mb-0">{{ donor.email }} · {{ donor.phone_no }}</p>
+    </div>
+  </div>
 
-<h3>Available Donations</h3>
-<ul>
-  {% for donation in donations %}
-    <li>{{ donation.title }} - {{ donation.category }} - {{ donation.quantity }} items</li>
-  {% empty %}
-    <li>No donations posted yet.</li>
-  {% endfor %}
-</ul>
+  <h3 class="mb-3" style="color:var(--green-700);">Available Donations</h3>
+  <div class="row g-3">
+    {% for donation in donations %}
+      <div class="col-12 col-md-6">
+        <div class="card h-100">
+          {% if donation.image %}
+            <img src="{{ donation.image.url }}" class="card-img-top" alt="{{ donation.title }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ donation.title }}</h5>
+            <p class="card-text text-muted">{{ donation.get_category_display }} · Qty: {{ donation.quantity }}</p>
+            <p class="card-text">{{ donation.description|truncatewords:25 }}</p>
+            <p class="card-text"><small class="text-muted">{{ donation.location }}</small></p>
+          </div>
+          <div class="card-footer bg-transparent border-top-0">
+            <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <p class="text-center">No donations posted yet.</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}

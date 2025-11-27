@@ -34,7 +34,7 @@
       <p><strong>Expiry Date:</strong> {{ donation.expiry_date }}</p>
       <p><strong>Date Posted:</strong> {{ donation.date_created }}</p>
       <p><strong>Donor:</strong>
-        <a href="{% url 'donor_public_profile' donation.donor.user.id %}" style="color: var(--medium-green);">
+        <a href="{% url 'donor_public_profile' donation.donor.pk %}" style="color: var(--medium-green);">
           {{ donation.donor.user.username }}
         </a>
       </p>
@@ -47,6 +47,8 @@
             Request Donation
           </button>
         </form>
+      {% elif not request.user.is_authenticated %}
+        <p style="margin-top:1rem; color:#666;">Login as an NGO to request this donation.</p>
       {% endif %}
     </div>
   </div>

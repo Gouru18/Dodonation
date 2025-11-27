@@ -19,8 +19,19 @@ class NGOSignupForm(UserSignupForm):
 
     class Meta(UserSignupForm.Meta):
         model = User   # still User, not NGOProfile
-        fields = UserSignupForm.Meta.fields  # username, email, phone_no, password
+        # include account fields plus NGO profile fields
+        fields = UserSignupForm.Meta.fields + ['name', 'reg_number']  # username, email, phone_no, password, name, reg_number
 
+class NGOProfileForm(forms.ModelForm):
+    class Meta:
+        model = NGOProfile
+        fields = ['name', 'reg_number']
+
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'phone_no']
 """class NGOProfileForm(forms.ModelForm):
     class Meta:
         model = NGOProfile

@@ -34,7 +34,7 @@ def login_view(request):
 
                 login(request, user)
                 # Use messages.success for login success (will be converted to alert in template)
-                messages.success(request, f"Welcome back, {user.username}!", extra_tags='alert')
+                # messages.success(request, f"Welcome back, {user.username}!", extra_tags='alert')
                 
                 # Redirect superusers/staff to admin panel, others to homepage
                 if user.is_superuser or user.is_staff:

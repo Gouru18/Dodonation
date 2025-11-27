@@ -7,14 +7,26 @@ from donor.models import DonorProfile
 
 # For editing User fields
 class DonorUserEditForm(forms.ModelForm):
+    # Allow editing username, email, phone and (optionally) password
+    password = forms.CharField(required=False, widget=forms.PasswordInput(attrs={'class': 'form-control'}), label='New password')
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'phone_no']
+        fields = ['username', 'email', 'phone_no', 'password']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone_no': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        pwd = self.cleaned_data.get('password')
+        if pwd:
+            user.set_password(pwd)
+        if commit:
+            user.save()
+        return user
 
 # For editing donor-specific fields
 class DonorProfileForm(forms.ModelForm):

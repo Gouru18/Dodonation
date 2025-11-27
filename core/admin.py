@@ -13,10 +13,15 @@ admin.site.index_title = "Welcome to DoDonation Admin Panel"
 
 @admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'donor', 'category', 'status', 'expiry_date', 'date_created')
+    list_display = ('title', 'donor_username', 'category', 'status', 'expiry_date', 'date_created')
     list_filter = ('category', 'status')
-    search_fields = ('title', 'description', 'donor__username')
+    # search by donor's username (through donor -> user)
+    search_fields = ('title', 'description', 'donor__user__username')
     readonly_fields = ('date_created',)
+
+    def donor_username(self, obj):
+        return obj.donor.user.username if obj.donor and obj.donor.user else '(unknown)'
+    donor_username.short_description = 'Donor'
 
 
 # ---------------------- CLAIM REQUEST ADMIN ----------------------
@@ -27,6 +32,30 @@ class ClaimRequestAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     search_fields = ('donation__title', 'receiver__name')
     readonly_fields = ('date_requested',)
+    actions = ['accept_requests', 'reject_requests', 'delete_requests']
+
+    def accept_requests(self, request, queryset):
+        count = 0
+        for req in queryset.select_related('donation'):
+            req.status = 'accepted'
+            # mark donation as claimed
+            req.donation.status = 'claimed'
+            req.donation.save()
+            req.save()
+            count += 1
+        self.message_user(request, f'✓ Accepted {count} request(s).')
+    accept_requests.short_description = 'Accept selected claim requests'
+
+    def reject_requests(self, request, queryset):
+        updated = queryset.update(status='rejected')
+        self.message_user(request, f'✗ Rejected {updated} request(s).')
+    reject_requests.short_description = 'Reject selected claim requests'
+
+    def delete_requests(self, request, queryset):
+        count = queryset.count()
+        queryset.delete()
+        self.message_user(request, f'✗ Deleted {count} request(s).')
+    delete_requests.short_description = 'Delete selected claim requests'
 
 
 # ---------------------- GENERAL REVIEW ADMIN ----------------------

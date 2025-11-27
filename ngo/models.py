@@ -6,8 +6,7 @@ class NGOProfile(models.Model):
     receiverID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     reg_number = models.CharField(max_length=50)
-    is_validated = models.BooleanField(default=False)
-    is_confirmed = models.BooleanField(default=False)
+    # `is_validated` removed — validation is no longer tracked with this flag.
 
     def __str__(self):
         return f"NGO: {self.name}"

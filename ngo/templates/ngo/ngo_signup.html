@@ -9,12 +9,9 @@
     <div class="form-container">
         <h2>NGO / Receiver Sign Up</h2>
 
-        {% if user_form.non_field_errors or profile_form.non_field_errors %}
+        {% if form.non_field_errors %}
             <div class="popup-message">
-                {% for error in user_form.non_field_errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-                {% for error in profile_form.non_field_errors %}
+                {% for error in form.non_field_errors %}
                     <p>{{ error }}</p>
                 {% endfor %}
             </div>
@@ -22,36 +19,79 @@
 
         <form method="post">
             {% csrf_token %}
-
             <h3>Account Information</h3>
-            {% for field in user_form %}
-                <div>
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
-                        <ul class="field-errors">
-                            {% for error in field.errors %}
-                                <li style="color:red;">{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            <div>
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <ul class="field-errors">
+                        {% for error in form.username.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <ul class="field-errors">
+                        {% for error in form.email.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.phone_no.label_tag }}
+                {{ form.phone_no }}
+                {% if form.phone_no.errors %}
+                    <ul class="field-errors">
+                        {% for error in form.phone_no.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <ul class="field-errors">
+                        {% for error in form.password.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
             <h3>NGO Profile</h3>
-            {% for field in profile_form %}
-                <div>
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
-                        <ul class="field-errors">
-                            {% for error in field.errors %}
-                                <li style="color:red;">{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            <div>
+                {{ form.name.label_tag }}
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <ul class="field-errors">
+                        {% for error in form.name.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form.reg_number.label_tag }}
+                {{ form.reg_number }}
+                {% if form.reg_number.errors %}
+                    <ul class="field-errors">
+                        {% for error in form.reg_number.errors %}
+                            <li style="color:red;">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
             <button type="submit">Submit for Verification</button>
         </form>

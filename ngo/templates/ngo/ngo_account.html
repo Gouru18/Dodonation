@@ -7,7 +7,7 @@
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Phone:</strong> {{ user.phone_no }}</p>
         <p><strong>Registration No:</strong> {{ receiver.reg_number }}</p>
-        <a href="#" class="button">Edit Profile</a>
+        <a href="{% url 'ngo_edit' %}" class="button">Edit Profile</a>
     </div>
 
     <hr>

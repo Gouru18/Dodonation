@@ -30,7 +30,8 @@ def login_required_home(view_func):
             return redirect('homepage')
         if user.role == 'ngo':
             ngo_profile = getattr(user, "ngo_profile", None)
-            if not ngo_profile or not ngo_profile.is_validated or not ngo_profile.is_confirmed:
+            # Require that NGO has a profile, but do not check `is_validated`.
+            if not ngo_profile:
                 return redirect('homepage')
         return view_func(request, *args, **kwargs)
     return wrapper
