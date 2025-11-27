@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-container">
+    <h2>Edit Profile</h2>
+    {# messages rendered in base.html - removed duplicate here #}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Save</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

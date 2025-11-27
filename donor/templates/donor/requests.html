@@ -1,0 +1,29 @@
+
+{% extends 'users/base.html' %}
+{% block title %}Donation Requests{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Incoming Requests</h2>
+  {% if requests %}
+    <div class="feed-grid">
+      {% for post in requests %}
+        <div class="post-card">
+          {% if post.image %}<div class="post-image"><img src="{{ post.image.url }}" alt="{{ post.title }}"></div>{% endif %}
+          <div class="post-info">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.description|truncatewords:25 }}</p>
+            <p class="muted">Requested by: {{ req.receiver.name }} ({{ req.receiver.email }})</p>
+            <div class="btn-group">
+              <a href="{% url 'accept_request' req.id %}" class="btn">Accept</a>
+              <a href="{% url 'reject_request' req.id %}" class="btn">Reject</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No incoming requests right now.</p>
+  {% endif %}
+</div>
+{% endblock %}

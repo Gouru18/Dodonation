@@ -1,0 +1,13 @@
+/* Navbar: green + beige */
+.navbar{ background: linear-gradient(90deg,var(--green-600),var(--green-700)); padding:12px 18px; }
+.navbar .navbar-nav{ list-style:none; margin:0; padding:0; display:flex; gap:18px; align-items:center; }
+.navbar .nav-link{ color:var(--beige-100); text-decoration:none; padding:6px 8px; display:inline-block; font-weight:600; }
+.navbar .nav-link:hover{ opacity:0.95; text-decoration:underline; }
+.navbar .nav-left{ flex:1; }
+
+/* Logout form styled like link */
+.logout-form{ display:inline; margin:0; }
+.logout-form button{ background:transparent; border:none; color:var(--beige-100); font-weight:600; cursor:pointer; padding:6px 8px; }
+.logout-form button:hover{ text-decoration:underline; }
+
+@media (max-width:600px){ .navbar .navbar-nav{ flex-direction:column; align-items:flex-start; gap:8px; } }

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="section-white">
+    <h2>Leave a Review</h2>
+    <p>Let us know what you think about Dodonation!</p>
+
+    <form method="POST">
+        {% csrf_token %} {{ form.as_p }} 
+
+        <button type="submit" class="button">Submit Review</button>
+    </form>
+
+    <hr style="margin-top: 2rem; margin-bottom: 2rem;">
+
+    <h3>What Others Are Saying</h3>
+    <div class="review-list">
+    {% for review in reviews %}
+        <div class="review-card" style="border: 1px solid #ccc; margin-bottom: 1rem; padding: 1rem; background-color: #fafafa;">
+            <p>"{{ review.message }}"</p>
+            <strong>- {{ review.name }}</strong>
+            <small style="display: block; color: #777;">{{ review.created_at|date:"F d, Y" }}</small>
+        </div>
+    {% empty %}
+        <p>No reviews yet. Be the first!</p>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

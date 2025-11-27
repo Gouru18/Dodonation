@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if user.is_authenticated %}
+        {# Welcome shown as one-time message after login; do not show persistent banner here #}
+        {% if posts %}
+            <div class="feed-grid">
+                {% for post in posts %}
+                    <div class="post-card">
+                        {% if post.image %}
+                            <div class="post-image">
+                                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                            </div>
+                        {% else %}
+                            <div class="post-image" style="background: var(--green-600);"></div>
+                        {% endif %}
+                        <div class="post-info">
+                            <h3>{{ post.title }}</h3>
+                            <p class="post-category">{{ post.category }}</p>
+                            <p class="post-donor">by {{ post.donor.username }}</p>
+                            <p class="post-description">{{ post.description|truncatewords:20 }}</p>
+                            <div class="post-meta">
+                                <span class="post-quantity">Qty: {{ post.quantity }}</span>
+                                <span class="post-location">{{ post.location }}</span>
+                            </div>
+                            <a class="btn-small" href="{% url 'donor_account' %}">View Details</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted">No posts yet. Check back soon!</p>
+        {% endif %}
+    {% else %}
+        <div class="form-container">
+            <h2>Welcome to DoDonation</h2>
+            <p>Connecting donors and NGOs to make a difference.</p>
+            <a class="btn" href="{% url 'login' %}">Login</a>
+            <a class="btn" href="{% url 'select_role' %}">Sign Up</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
