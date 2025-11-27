@@ -77,9 +77,8 @@ class DonorAdmin(admin.ModelAdmin):
 
 @admin.register(DonorProfile)
 class DonorAdmin(admin.ModelAdmin):
-    list_display = ('user_username', 'user_email', 'user_phone', 'user_is_active', 'user_date_joined', 'organization_name', 'verified')
+    list_display = ('user_username', 'user_email', 'user_phone', 'user_is_active', 'user_date_joined', 'organization_name')
     search_fields = ('user__username', 'user__email', 'organization_name')
-    list_filter = ('verified',)
 
     def user_username(self, obj):
         return obj.user.username

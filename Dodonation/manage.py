@@ -3,6 +3,11 @@
 import os
 import sys
 
+# Ensure project root is on sys.path so the `Dodonation` package can be
+# imported even if `manage.py` is executed from inside the package folder.
+# This inserts the parent directory of this file (the project root) first.
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 
 def main():
     """Run administrative tasks."""
