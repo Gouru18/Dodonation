@@ -7,7 +7,7 @@ from django.db.models import Q
 def donation_list(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '')
-    donations = Donation.objects.all() # pylint: disable=no-member
+    donations = Donation.objects.all() 
 
     if query:
         donations = donations.filter(
