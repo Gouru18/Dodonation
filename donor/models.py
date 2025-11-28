@@ -1,7 +1,7 @@
 from django.db import models
 from users.models import User
 
-class DonorProfile(models.Model):
+class Donor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="donor_profile")
     donorID = models.AutoField(primary_key=True)
 

@@ -2,7 +2,7 @@ import re
 from django import forms
 from users.models import User
 from core.models import  Report, Donation
-from donor.models import DonorProfile
+from donor.models import Donor
 
 # For editing User fields
 class DonorUserEditForm(forms.ModelForm):
@@ -36,7 +36,7 @@ class DonorUserEditForm(forms.ModelForm):
 # For editing donor-specific fields
 class DonorProfileForm(forms.ModelForm):
     class Meta:
-        model = DonorProfile
+        model = Donor
         fields = []
 
 
@@ -56,7 +56,7 @@ class ProblemReportForm(forms.ModelForm):
 
 class DonorProfileForm(forms.ModelForm):
     class Meta:
-        model = DonorProfile
+        model = Donor
         fields = []
 
 

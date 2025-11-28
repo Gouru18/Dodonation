@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.models import Donation, ClaimRequest
 from core.forms import DonationForm
-from donor.models import DonorProfile
+from donor.models import Donor
 from donor.forms import DonorProfileForm, DonorSignupForm, DonorUserEditForm
 from django.contrib.auth import update_session_auth_hash
 
@@ -39,7 +39,7 @@ def donor_profile(request):
     # Try to get donor profile, create if it doesn't exist
     donor_profile = getattr(user, "donor_profile", None)
     if donor_profile is None:
-        donor_profile = DonorProfile(user=user)
+        donor_profile = Donor(user=user)
         donor_profile.save()
 
     if request.method == "POST":
@@ -139,6 +139,6 @@ def donation_requests(request):
 
 
 def donor_public_profile(request, donor_id):
-    donor_profile = get_object_or_404(DonorProfile, pk=donor_id)
+    donor_profile = get_object_or_404(Donor, pk=donor_id)
     donations = donor_profile.donations.all()
     return render(request, 'donor/donor_public_profile.html', {'donor': donor_profile.user, 'donations': donations})

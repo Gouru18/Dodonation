@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import DonorProfile
+from .models import Donor
 
-@admin.register(DonorProfile)
+@admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
     list_display = ('user_username', 'user_email', 'user_phone', 'user_is_active', 'user_date_joined')
     search_fields = ('user__username', 'user__email')

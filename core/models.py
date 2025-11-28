@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from users.models import User
 from ngo.models import NGOProfile
-from donor.models import DonorProfile
+from donor.models import Donor
 
 CATEGORIES = [
     ('food', 'Food'),
@@ -27,7 +27,7 @@ class Donation(models.Model):
     status = models.CharField(max_length=20, choices=DONATION_STATUS, default='available')
     date_created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='donations/', blank=True, null=True)
-    donor = models.ForeignKey(DonorProfile, on_delete=models.CASCADE, related_name='donations')
+    donor = models.ForeignKey(Donor, on_delete=models.CASCADE, related_name='donations')
 
     def save(self, *args, **kwargs):
         if self.status == 'available' and self.expiry_date < timezone.now().date():
