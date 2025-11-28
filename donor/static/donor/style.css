@@ -72,7 +72,6 @@ input[type="submit"]:hover {
 .form-wrapper input[type="file"] { color:#ddd; margin-top:6px; }
 .form-wrapper button { display:inline-block; }
 
-/* Small tweaks */
 .btn-create { background:#ffd54f; color:#111; font-weight:700; }
 .btn { background:#ffd54f; color:#111; }
 

@@ -1,12 +1,3 @@
-"""
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from .forms import UserSignupForm, DonorSignupForm, ReceiverSignupForm, LoginForm
-from .models import ClaimRequest, Donor, Receiver, User, Donation
-from django.db.models import Sum
-"""
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -14,9 +5,6 @@ from .forms import UserSignupForm, LoginForm
 from users.models import User
 from django.db.models import Sum
 from core.models import Donation
-
-
-
 
 def login_view(request):
     if request.method == 'POST':

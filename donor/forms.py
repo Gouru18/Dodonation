@@ -1,7 +1,6 @@
+import re
 from django import forms
-#from .models import DonationPost, ProblemReport
 from users.models import User
-from .models import  DonorProfile
 from core.models import  Report, Donation
 from donor.models import DonorProfile
 
@@ -12,7 +11,7 @@ class DonorUserEditForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'phone_no', 'password']
+        fields = ['username', 'email', 'phone_no']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -27,12 +26,18 @@ class DonorUserEditForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+    def clean_phone_no(self):
+        phone = self.cleaned_data.get('phone_no')
+        if not re.fullmatch(r'\d{8}', phone):  # exactly 8 digits
+            raise forms.ValidationError("Enter a valid 8-digit phone number.")
+        return phone
 
 # For editing donor-specific fields
 class DonorProfileForm(forms.ModelForm):
     class Meta:
         model = DonorProfile
-        fields = ['organization_name']
+        fields = []
 
 
 class DonationPostForm(forms.ModelForm):
@@ -49,21 +54,10 @@ class ProblemReportForm(forms.ModelForm):
         fields = ['name', 'email', 'message']
 
 
-"""
-class DonationForm(forms.ModelForm):
-    class Meta:
-        model = Donation
-        fields = ['title', 'description', 'category', 'quantity', 'expiry_date', 'location', 'image']
-        widgets = {
-            'expiry_date': forms.DateInput(attrs={'type': 'date'}),
-            'description': forms.Textarea(attrs={'rows': 4}), 
-        }
-"""
-
 class DonorProfileForm(forms.ModelForm):
     class Meta:
         model = DonorProfile
-        fields = ['organization_name']
+        fields = []
 
 
 class DonorSignupForm(forms.ModelForm):
@@ -72,3 +66,9 @@ class DonorSignupForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'phone_no', 'password']
+
+    def clean_phone_no(self):
+        phone = self.cleaned_data.get('phone_no')
+        if not re.fullmatch(r'\d{8}', phone):  # exactly 8 digits
+            raise forms.ValidationError("Enter a valid 8-digit phone number.")
+        return phone

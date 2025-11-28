@@ -37,23 +37,6 @@ class Donation(models.Model):
     def __str__(self):
         return f"{self.title} ({self.donor.user.username})"
 
-"""
-REQUEST_STATUS = [
-    ('pending', 'Pending'),
-    ('accepted', 'Accepted'),
-    ('rejected', 'Rejected'),
-]
-
-class ClaimRequest(models.Model):
-    donation = models.ForeignKey(Donation, on_delete=models.CASCADE, related_name='claim_requests')
-    receiver = models.ForeignKey(NGOProfile, on_delete=models.CASCADE, related_name='requests')
-    status = models.CharField(max_length=10, choices=REQUEST_STATUS, default='pending')
-    date_requested = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('donation', 'receiver')
-"""
-
 REQUEST_STATUS = [
     ('pending', 'Pending'),
     ('accepted', 'Accepted'),

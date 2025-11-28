@@ -117,6 +117,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+TIME_ZONE = 'Indian/Mauritius'
 USE_TZ = True
 
 

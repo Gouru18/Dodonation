@@ -1,8 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-#from django.utils import timezone
-#from .models import User, Receiver
-
 
 class User(AbstractUser):
     ROLE_CHOICES = [
@@ -13,7 +10,7 @@ class User(AbstractUser):
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
-    phone_no = models.CharField(max_length=15)
+    phone_no = models.CharField(max_length=8)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='donor')
 
     USERNAME_FIELD = 'username'  # login by username

@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -6,7 +5,7 @@ from core.models import Donation, ClaimRequest
 from core.forms import DonationForm
 from donor.models import DonorProfile
 from donor.forms import DonorProfileForm, DonorSignupForm, DonorUserEditForm
-
+from django.contrib.auth import update_session_auth_hash
 
 
 def donor_signup_view(request):
@@ -34,47 +33,60 @@ def donor_signup_view(request):
     })
 
 
-
 @login_required
 def donor_profile(request):
     user = request.user
+    # Try to get donor profile, create if it doesn't exist
     donor_profile = getattr(user, "donor_profile", None)
+    if donor_profile is None:
+        donor_profile = DonorProfile(user=user)
+        donor_profile.save()
 
-    if request.method == 'POST':
-        if 'update_profile' in request.POST:
+    if request.method == "POST":
+        # Updating profile
+        if "update_profile" in request.POST:
             user_form = DonorUserEditForm(request.POST, instance=user)
-            profile_form = DonorProfileForm(request.POST, instance=donor_profile)
-            donation_form = DonationForm()  # empty form
+            profile_form = DonorProfileForm(request.POST, request.FILES, instance=donor_profile)
+
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
-                profile_form.save()
-                messages.success(request, "Profile updated successfully!")
-                return redirect('donor_profile')
 
-        elif 'create_donation' in request.POST:
-            user_form = DonorUserEditForm(instance=user)
-            profile_form = DonorProfileForm(instance=donor_profile)
+                profile = profile_form.save(commit=False)
+                profile.user = user  # make sure user is attached
+                profile.save()
+
+                # Keep user logged in even if username/email changes
+                update_session_auth_hash(request, user)
+
+                messages.success(request, "Profile updated successfully!")
+                return redirect("donor_profile")
+
+        # Creating new donation
+        elif "create_donation" in request.POST:
             donation_form = DonationForm(request.POST, request.FILES)
             if donation_form.is_valid():
                 donation = donation_form.save(commit=False)
-                donation.donor = donor_profile   # link to donor profile
+                donation.donor = donor_profile
                 donation.save()
                 messages.success(request, "Donation posted successfully!")
-                return redirect('donor_profile')
-
+                return redirect("donor_profile")
     else:
         user_form = DonorUserEditForm(instance=user)
         profile_form = DonorProfileForm(instance=donor_profile)
         donation_form = DonationForm()
 
-    donations = Donation.objects.filter(donor=donor_profile)
+    donations = Donation.objects.filter(donor=donor_profile).order_by("-date_created")
 
-    return render(request, 'donor/donor_profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form,
-        'donation_form': donation_form,
-        'donations': donations,
-    })
+    return render(
+        request,
+        "donor/donor_profile.html",
+        {
+            "user_form": user_form,
+            "profile_form": profile_form,
+            "donation_form": donation_form,
+            "donations": donations,
+        },
+    )
 
 
 @login_required
@@ -91,6 +103,7 @@ def edit_donation(request, donation_id):
         form = DonationForm(instance=donation)
     return render(request, 'core/edit_donation.html', {'form': form})
 
+
 @login_required
 def delete_donation(request, donation_id):
     donor_profile = getattr(request.user, 'donor_profile', None)
@@ -99,11 +112,7 @@ def delete_donation(request, donation_id):
         donation.delete()
         messages.success(request, "Donation deleted!")
         return redirect('donor_profile')
-    else:
-        form = DonationForm(instance=donation)
-    return render(request, 'core/edit_donation.html', {'form': form})
-    # Optional: confirm screen
-    #return render(request, 'users/confirm_delete.html', {'donation': donation})
+    return redirect('donor_profile')  # fallback
 
 
 @login_required
@@ -118,7 +127,7 @@ def donation_requests(request):
         req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=donor)
         if action == 'accept':
             req.status = 'accepted'
-            req.donation.status = 'claimed'  # from Donation.STATUS
+            req.donation.status = 'claimed'
             req.donation.save()
             req.save()
         elif action == 'reject':
@@ -128,22 +137,8 @@ def donation_requests(request):
 
     return render(request, 'donor/donation_requests.html', {'requests': requests})
 
-"""
-def donor_public_profile(request, donor_id):
-    donor = get_object_or_404(DonorProfile, id=donor_id)
-    donations = donor.donations.filter(status='available')  # Or show all
-
-    context = {
-        'donor': donor,
-        'donations': donations,
-    }
-    return render(request, 'donor/donor_public_profile.html', context)
-"""
 
 def donor_public_profile(request, donor_id):
-    # DonorProfile uses `donorID` as the primary key field; use pk lookup to support different PK names.
     donor_profile = get_object_or_404(DonorProfile, pk=donor_id)
-    # include donations for this donor (optionally filter by availability)
     donations = donor_profile.donations.all()
-    # use the existing template `donor/donor_public_profile.html` and pass the expected context
     return render(request, 'donor/donor_public_profile.html', {'donor': donor_profile.user, 'donations': donations})

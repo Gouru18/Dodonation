@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div style="max-width: 900px; margin: 2rem auto; padding: 1rem;">
     <h2 style="text-align: center; color: var(--dark-green); margin-bottom: 2rem;">Donor Dashboard</h2>
@@ -10,73 +11,186 @@
             {% csrf_token %}
             <h4>Account</h4>
             {{ user_form.as_p }}
-            <h4>Donor Details</h4>
             {{ profile_form.as_p }}
-            <button type="submit" name="update_profile" class="button" style="background-color: var(--dark-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Update Profile</button>
+            <button type="submit" name="update_profile" class="button"
+                style="background-color: var(--dark-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Update
+                Profile</button>
         </form>
     </div>
 
     <!-- Create Donation Section -->
-    <div style="background-color: #fdf6e3; padding: 1.5rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+    <div
+        style="background-color: #fdf6e3; padding: 2rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;">
         <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Create New Donation</h3>
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" class="styled-form">
             {% csrf_token %}
             {{ donation_form.as_p }}
-            <button type="submit" name="create_donation" class="button" style="background-color: var(--medium-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">Post Donation</button>
+            <button type="submit" name="create_donation" class="button">Post Donation</button>
         </form>
     </div>
 
-    <!-- Donations Table -->
-    <div style="overflow-x: auto; background-color: #fdf6e3; padding: 1rem; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Your Donations</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead style="background-color: var(--dark-green); color: white;">
-                <tr>
-                    <th style="padding: 0.5rem;">Image</th>
-                    <th style="padding: 0.5rem;">Title</th>
-                    <th style="padding: 0.5rem;">Category</th>
-                    <th style="padding: 0.5rem;">Quantity</th>
-                    <th style="padding: 0.5rem;">Status</th>
-                    <th style="padding: 0.5rem;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for donation in donations %}
-                <tr style="text-align: center; border-bottom: 1px solid #ddd;">
-                    <td style="padding: 0.5rem;">
-                        {% if donation.image_url %}
-                            <img src="{{ donation.image_url }}" alt="{{ donation.title }}" style="width:80px; height:auto; border-radius:4px;">
-                        {% else %}
-                            No image
-                        {% endif %}
-                    </td>
-                    <td style="padding: 0.5rem;">{{ donation.title }}</td>
-                    <td style="padding: 0.5rem;">{{ donation.category|title }}</td>
-                    <td style="padding: 0.5rem;">{{ donation.quantity }}</td>
-                    <td style="padding: 0.5rem;">
-                        {% if donation.status == 'available' %}
-                            <span style="color: green; font-weight: bold;">{{ donation.status|title }}</span>
-                        {% elif donation.status == 'claimed' %}
-                            <span style="color: orange; font-weight: bold;">{{ donation.status|title }}</span>
-                        {% elif donation.status == 'expired' %}
-                            <span style="color: red; font-weight: bold;">{{ donation.status|title }}</span>
-                        {% else %}
-                            {{ donation.status|title }}
-                        {% endif %}
-                    </td>
-                    <td style="padding: 0.5rem;">
-                        <a href="{% url 'edit_donation' donation.id %}" style="margin-right: 0.5rem; color: var(--medium-green); text-decoration: none; font-weight: bold;">Edit</a>
-                        <a href="{% url 'delete_donation' donation.id %}" style="margin-right: 0.5rem; color: red; text-decoration: none; font-weight: bold;">Delete</a>
-                        <a href="{% url 'donation_requests'  %}" style="color: var(--dark-green); text-decoration: none; font-weight: bold;">Requests</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 1rem;">No donations yet. Create one above!</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <style>
+        /* General form styling */
+        .styled-form input[type="text"],
+        .styled-form input[type="number"],
+        .styled-form input[type="date"],
+        .styled-form input[type="file"],
+        .styled-form select,
+        .styled-form textarea {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .styled-form input:focus,
+        .styled-form select:focus,
+        .styled-form textarea:focus {
+            outline: none;
+            border-color: var(--medium-green);
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.2);
+        }
+
+        /* File input styling */
+        .styled-form input[type="file"] {
+            padding: 0.3rem;
+            cursor: pointer;
+        }
+
+        /* Submit button */
+        .styled-form .button {
+            background-color: var(--medium-green);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .styled-form .button:hover {
+            background-color: var(--dark-green);
+        }
+    </style>
+
+    <!-- Donations Cards -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% for donation in donations %}
+        <div class="donation-card"
+            style="display: flex; gap: 1rem; background-color: #fdf6e3; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); overflow: hidden;">
+            {% if donation.image %}
+            <div style="flex: 0 0 200px; max-height: 200px; overflow: hidden;">
+                <img src="{{ donation.image.url }}" alt="{{ donation.title }}"
+                    style="width: 100%; height: 100%; object-fit: cover; border-radius: 7%;">
+            </div>
+            {% endif %}
+
+            <div style="flex: 1; padding: 1rem;">
+                <h3 style="margin-top: 0; color: var(--dark-green);">{{ donation.title }}</h3>
+                <p><strong>Category:</strong> {{ donation.get_category_display }}</p>
+                <p><strong>Status:</strong>
+                    {% if donation.status == 'available' %}
+                    <span style="color: green; font-weight: bold;">{{ donation.status|title }}</span>
+                    {% elif donation.status == 'claimed' %}
+                    <span style="color: orange; font-weight: bold;">{{ donation.status|title }}</span>
+                    {% elif donation.status == 'expired' %}
+                    <span style="color: red; font-weight: bold;">{{ donation.status|title }}</span>
+                    {% else %}
+                    {{ donation.status|title }}
+                    {% endif %}
+                </p>
+                <p><strong>Quantity:</strong> {{ donation.quantity }}</p>
+                <p><strong>Expiry Date:</strong> {{ donation.expiry_date }}</p>
+                <p><strong>Date Posted:</strong> {{ donation.date_created|date:"M d, Y H:i" }}</p>
+
+                <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="{% url 'edit_donation' donation.id %}">
+                        <button type="button"
+                            style="background-color: var(--medium-green); color: white; padding: 0.4rem 0.8rem; border-radius: 5px; border: none; cursor: pointer;">Edit</button>
+                    </a>
+                    <!-- Delete Button -->
+                    <button type="button" onclick="openModal('{{ donation.id }}')"
+                        style="background-color: red; color: white; padding: 0.4rem 0.8rem; border-radius: 5px; border: none; cursor: pointer;">
+                        Delete
+                    </button>
+
+                    <!-- Modal -->
+                    <div id="modal{{ donation.id }}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('{{ donation.id }}')">&times;</span>
+                            <p>Are you sure you want to delete "<strong>{{ donation.title }}</strong>"?</p>
+                            <div style="margin-top: 1rem;">
+                                <button onclick="closeModal('{{ donation.id }}')"
+                                    style="padding:0.4rem 0.8rem; border-radius:5px; border:none;">Cancel</button>
+                                <form method="POST" action="{% url 'delete_donation' donation.id %}"
+                                    style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                        style="background-color:red; color:white; padding:0.4rem 0.8rem; border-radius:5px; border:none;">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CSS -->
+                    <style>
+                        .modal {
+                            display: none;
+                            /* Hidden by default */
+                            position: fixed;
+                            z-index: 1000;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            overflow: auto;
+                            background-color: rgba(0, 0, 0, 0.5);
+                        }
+
+                        .modal-content {
+                            background-color: #fefefe;
+                            margin: 15% auto;
+                            padding: 1rem;
+                            border-radius: 10px;
+                            max-width: 400px;
+                            text-align: center;
+                            position: relative;
+                        }
+
+                        .close {
+                            position: absolute;
+                            top: 0.5rem;
+                            right: 1rem;
+                            font-size: 1.5rem;
+                            cursor: pointer;
+                        }
+                    </style>
+
+                    <!-- JS -->
+                    <script>
+                        function openModal(id) {
+                            document.getElementById('modal' + id).style.display = 'block';
+                        }
+                        function closeModal(id) {
+                            document.getElementById('modal' + id).style.display = 'none';
+                        }
+
+                    </script>
+
+                    <a href="{% url 'donation_requests' %}">
+                        <button type="button"
+                            style="background-color: var(--dark-green); color: white; padding: 0.4rem 0.8rem; border-radius: 5px; border: none; cursor: pointer;">Requests</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center;">No donations yet. Create one above!</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
