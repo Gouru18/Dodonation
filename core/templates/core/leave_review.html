@@ -1,29 +1,69 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="section-white form-wrapper">
-    <h2>Leave a Review</h2>
-    <p>Let us know what you think about Dodonation!</p>
+<div style="display: flex; justify-content: center; align-items: flex-start; min-height: 70vh; padding-top: 2rem;">
+    <div style="width: 100%; max-width: 600px; padding: 2rem; background-color: var(--cream); border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; color: var(--dark-green); margin-bottom: 1rem;">Leave a Review</h2>
+        <p style="text-align: center; margin-bottom: 1.5rem;">Let us know what you think about Dodonation!</p>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="button">Submit Review</button>
-    </form>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {% for field in form %}
+                <div style="margin-bottom: 1rem;">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div style="color: red; font-size: 0.9rem;">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-    <hr style="margin-top: 2rem; margin-bottom: 2rem;">
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-success" style="width: 100%;">Submit Review</button>
+            </div>
+        </form>
 
-    <h3>What Others Are Saying</h3>
-    <div class="review-list">
-    {% for review in reviews %}
-        <div class="review-card feed-card" style="margin-bottom: 1rem;">
-            <p>"{{ review.message }}"</p>
-            <strong>- {{ review.name }}</strong>
-            <small style="display: block; color: #777;">{{ review.created_at|date:"F d, Y" }}</small>
+        <hr style="margin-top: 2rem; margin-bottom: 2rem;">
+
+        <h3 style="color: var(--medium-green); margin-bottom: 1rem;">What Others Are Saying</h3>
+        <div class="review-list">
+            {% for review in reviews %}
+                <div style="background: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                    <p style="font-style: italic; margin-bottom: 0.5rem;">"{{ review.message }}"</p>
+                    <strong style="color: var(--dark-green);">- {{ review.name }}</strong>
+                    <small style="display: block; color: #777; margin-top: 0.3rem;">{{ review.created_at|date:"F d, Y" }}</small>
+                </div>
+            {% empty %}
+                <p style="text-align: center; color: #666;">No reviews yet. Be the first!</p>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No reviews yet. Be the first!</p>
-    {% endfor %}
     </div>
 </div>
+
+<style>
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        font-family: inherit;
+        background-color: white;
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.3rem;
+        font-weight: bold;
+        color: var(--dark-green);
+    }
+</style>
 {% endblock %}

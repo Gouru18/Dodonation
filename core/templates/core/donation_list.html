@@ -10,9 +10,17 @@
     <option value="">All Categories</option>
     <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
     <option value="clothes" {% if category == 'clothes' %}selected{% endif %}>Clothes</option>
+    <option value="furniture" {% if category == 'furniture' %}selected{% endif %}>Furniture</option>
+    <option value="electronics" {% if category == 'electronics' %}selected{% endif %}>Electronics</option>
     <option value="others" {% if category == 'others' %}selected{% endif %}>Others</option>
   </select>
-  <button type="submit" style="padding: 0.5rem 1rem; background-color: var(--dark-green); color: white; border: none; border-radius: 5px;">Filter</button>
+  <select name="status" style="padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+    <option value="">All Status</option>
+    <option value="available" {% if status == 'available' %}selected{% endif %}>Available</option>
+    <option value="claimed" {% if status == 'claimed' %}selected{% endif %}>Claimed</option>
+    <option value="expired" {% if status == 'expired' %}selected{% endif %}>Expired</option>
+  </select>
+  <button type="submit" class="btn btn-success">Filter</button>
 </form>
 
 <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 900px; margin: 0 auto;">
@@ -40,15 +48,17 @@
       </p>
 
       {% if request.user.is_authenticated and request.user.role == 'ngo' %}
-        <form method="post" style="margin-top: 1rem;">
-          {% csrf_token %}
-          <input type="hidden" name="donation_id" value="{{ donation.id }}">
-          <button type="submit" class="button" style="background-color: var(--dark-green); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: none;">
-            Request Donation
-          </button>
-        </form>
+          {% if donation.status != 'expired' %}
+              <form method="post" style="margin-top: 1rem;">
+                {% csrf_token %}
+                <input type="hidden" name="donation_id" value="{{ donation.id }}">
+                <button type="submit" class="btn btn-success">Request Donation</button>
+              </form>
+          {% else %}
+              <p style="margin-top:1rem; color:#b23b3b; font-weight:bold;">This donation has expired and cannot be requested.</p>
+          {% endif %}
       {% elif not request.user.is_authenticated %}
-        <p style="margin-top:1rem; color:#666;">Login as an NGO to request this donation.</p>
+          <p style="margin-top:1rem; color:#666;">Login as an NGO to request this donation.</p>
       {% endif %}
     </div>
   </div>

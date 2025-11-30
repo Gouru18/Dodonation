@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from users.decorators import login_ngo, login_donor
 from core.models import Donation, ClaimRequest
 from core.forms import DonationForm
 from donor.models import DonorProfile
@@ -33,7 +34,7 @@ def donor_signup_view(request):
     })
 
 
-@login_required
+@login_donor
 def donor_profile(request):
     user = request.user
     # Try to get donor profile, create if it doesn't exist
@@ -89,7 +90,7 @@ def donor_profile(request):
     )
 
 
-@login_required
+@login_donor
 def edit_donation(request, donation_id):
     donor_profile = getattr(request.user, 'donor_profile', None)
     donation = get_object_or_404(Donation, id=donation_id, donor=donor_profile)
@@ -104,7 +105,7 @@ def edit_donation(request, donation_id):
     return render(request, 'core/edit_donation.html', {'form': form})
 
 
-@login_required
+@login_donor
 def delete_donation(request, donation_id):
     donor_profile = getattr(request.user, 'donor_profile', None)
     donation = get_object_or_404(Donation, id=donation_id, donor=donor_profile)
@@ -115,7 +116,7 @@ def delete_donation(request, donation_id):
     return redirect('donor_profile')  # fallback
 
 
-@login_required
+@login_donor
 def donation_requests(request):
     donor = getattr(request.user, "donor_profile", None)
     # Get all claim requests for donations by this donor
@@ -126,10 +127,14 @@ def donation_requests(request):
         action = request.POST.get('action')
         req = get_object_or_404(ClaimRequest, id=req_id, donation__donor=donor)
         if action == 'accept':
-            req.status = 'accepted'
-            req.donation.status = 'claimed'
-            req.donation.save()
-            req.save()
+        # Accept this request and automatically reject any other pending requests
+            with transaction.atomic():
+                req.status = 'accepted'
+                req.donation.status = 'claimed'
+                req.donation.save()
+                req.save()
+                # reject other pending requests for the same donation
+                ClaimRequest.objects.filter(donation=req.donation, status='pending').exclude(id=req.id).update(status='rejected')
         elif action == 'reject':
             req.status = 'rejected'
             req.save()

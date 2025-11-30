@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .ngo-list-section {
+        background: #ffffff;
+        padding: 3rem 5%;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+    }
+
+    .ngo-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 1.5rem;
+    }
+
+    .ngo-list li {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #ddd;
+        transition: background 0.2s;
+    }
+
+    .ngo-list li:hover {
+        background: var(--cream);
+    }
+
+    .ngo-list a {
+        text-decoration: none;
+        color: var(--dark-green);
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .ngo-list a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="ngo-list-section">
+    <h3>Registered NGOs</h3>
+    <ul class="ngo-list">
+        {% for ngo in ngos %}
+            <li>
+                <a href="{% url 'ngo_public_profile' ngo.pk %}">{{ ngo.name }}</a>
+            </li>
+        {% empty %}
+            <li>No NGOs registered yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

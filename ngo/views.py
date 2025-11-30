@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from users.decorators import login_ngo, login_donor
 from .forms import NGOSignupForm, NGOProfileForm
 from core.models import ClaimRequest
 from .models import NGOProfile
@@ -31,6 +31,8 @@ def ngo_signup_view(request):
 def ngo_pending_view(request):
     return render(request, 'ngo/ngo_pending.html')
 
+
+@login_ngo
 def ngo_account_view(request):
     ngo_profile = request.user.ngo_profile
     claimed = ClaimRequest.objects.filter(receiver=ngo_profile, status='accepted')
@@ -48,13 +50,14 @@ def ngo_account_view(request):
         'stats': stats,
     })
 
-#@login_required
-def ngo_public_profile(request, ngo_id):
+
+
+def ngo_public_profile(request, ngo_Id):
     # Get the NGO object (Receiver)
-    ngo = get_object_or_404(NGOProfile, id=ngo_id)
+    ngo = get_object_or_404(NGOProfile, pk = ngo_Id)
     
     # Optional: show donations requested by this NGO
-    requests_made = ClaimRequest.objects.filter(receiver=ngo).select_related("donation")  # Assuming ClaimRequest has receiver foreign key
+    requests_made = ClaimRequest.objects.filter(receiver=ngo).select_related("donation")  # ClaimRequest has receiver foreign key
     
     context = {
         'ngo': ngo,
@@ -63,7 +66,8 @@ def ngo_public_profile(request, ngo_id):
     return render(request, 'ngo/ngo_public_profile.html', context)
 
 
-@login_required
+
+@login_ngo
 def ngo_edit_view(request):
     # Ensure user has an NGO profile
     if not hasattr(request.user, 'ngo_profile'):
@@ -88,5 +92,4 @@ def ngo_edit_view(request):
         'user_form': user_form,
         'profile_form': profile_form,
     })
-
 

@@ -1,27 +1,113 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>{{ ngo.name }} ({{ ngo.user.username }})</h2>
-<p>Email: {{ ngo.user.email }}</p>
-<p>Phone: {{ ngo.user.phone_no }}</p>
-<p>Registration Number: {{ ngo.reg_number }}</p>
+<style>
+    .profile-section {
+        background: #ffffff;
+        padding: 2.5rem;
+        margin: 2rem auto;
+        max-width: 900px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-<h3>Donations Requested</h3>
-<table>
-    <tr>
-        <th>Donation Title</th>
-        <th>Status</th>
-    </tr>
-    {% for req in requests_made %}
-    <tr>
-        <td>{{ req.donation.title }}</td>
-        <td>{{ req.status }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="2">No requests yet.</td>
-    </tr>
-    {% endfor %}
-</table>
+    .profile-header {
+        border-bottom: 2px solid var(--light-green);
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+
+    .profile-header h2 {
+        color: var(--dark-green);
+        margin: 0;
+    }
+
+    .profile-details p {
+        margin: 0.4rem 0;
+        font-size: 1.05rem;
+    }
+
+    .status-active {
+        color: var(--medium-green);
+        font-weight: bold;
+    }
+
+    .status-inactive {
+        color: #b23b3b;
+        font-weight: bold;
+    }
+
+    .requests-section h3 {
+        margin-top: 2rem;
+        color: var(--dark-green);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    table th, table td {
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    table th {
+        background-color: var(--cream);
+        color: var(--dark-green);
+    }
+
+    table tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .empty-row {
+        text-align: center;
+        font-style: italic;
+        color: #666;
+    }
+</style>
+
+<div class="profile-section">
+    <div class="profile-header">
+        <h2>{{ ngo.name }} <small>({{ ngo.user.username }})</small></h2>
+    </div>
+
+    <div class="profile-details">
+        <p><strong>Email:</strong> {{ ngo.user.email }}</p>
+        <p><strong>Phone:</strong> {{ ngo.user.phone_no }}</p>
+        <p><strong>Registration Number:</strong> {{ ngo.reg_number }}</p>
+        <p><strong>Account Status:</strong>
+            {% if ngo.user.is_active %}
+                <span class="status-active">Activated</span>
+            {% else %}
+                <span class="status-inactive">Not Activated</span>
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="requests-section">
+        <h3>Donations Requested</h3>
+        <table>
+            <tr>
+                <th>Donation Title</th>
+                <th>Status</th>
+            </tr>
+            {% for req in requests_made %}
+            <tr>
+                <td>{{ req.donation.title }}</td>
+                <td>{{ req.status }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="empty-row">No requests yet.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 
 {% endblock %}
+

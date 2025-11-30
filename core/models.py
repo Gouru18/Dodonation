@@ -7,13 +7,14 @@ from donor.models import DonorProfile
 CATEGORIES = [
     ('food', 'Food'),
     ('clothes', 'Clothes'),
+    ('furniture', 'Furniture'),
+    ('electronics', 'Electronics'),
     ('others', 'Others'),
 ]
 
 DONATION_STATUS = [
     ('available', 'Available'),
     ('claimed', 'Claimed'),
-    ('collected', 'Collected'),
     ('expired', 'Expired'),
 ]
 

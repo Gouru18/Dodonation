@@ -52,8 +52,9 @@
 <div class="hero-section">
     <div class="hero-text">
         <h2>Connecting donors with NGOs</h2>
-        <div class="hero-buttons">
-            <a href="{% url 'donation_list' %}" class="button">View donations</a>
+        <div>
+            <a href="{% url 'donation_list' %}" class="btn btn-success">View donations</a>
+            <a href="{% url 'ngo_list' %}" class="btn btn-success">View NGOs</a>
         </div>
     </div>
     <div class="hero-image">
@@ -69,7 +70,7 @@
     <h3>About Dodonation</h3>
     <p>
         Our project is a web platform, named Dodonation which connects donors 
-        (individuals/shops that have excess items like food and clothing items) 
+        (individuals/shops that have excess items like food, clothing, etc) 
         to vetted NGOs in their local area.
     </p>
 </div>
@@ -77,19 +78,31 @@
 
 <!-- RECENT DONATIONS -->
 <div class="section-white">
-    <h3>Our Recent Donations</h3>
+    <h3 style="color: var(--dark-green); margin-bottom: 1rem;">Our Recent Donations</h3>
 
-    <div class="donation-list">
+    {% if recent_donations %}
+    <div class="donation-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
         {% for donation in recent_donations %}
-        <div class="donation-card">
-            <h4>{{ donation.title }}</h4>
-            <p><strong>Description:</strong> {{ donation.description }}</p>
-            <p><strong>Category:</strong> {{ donation.category }}</p>
+        <div class="donation-card" style="background:#f5f0e6; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.08); padding:1rem;">
+      
+            <h4 style="margin:0 0 0.5rem; color: var(--dark-green);">{{ donation.title }}</h4>
+            <p><strong>Description:</strong> {{ donation.description|truncatechars:120 }}</p>
+            <p><strong>Category:</strong> {{ donation.get_category_display }}</p>
             <p><strong>Quantity:</strong> {{ donation.quantity }}</p>
             <p><strong>Location:</strong> {{ donation.location }}</p>
+            <p><strong>Posted:</strong> {{ donation.date_created|date:"M d, Y" }}</p>
+
+            {% if donation.image %}
+            <div style="margin-top:0.7rem; border-radius:8px; overflow:hidden;">
+                <img src="{{ donation.image.url }}" alt="{{ donation.title }}" style="width:100%; height:160px; object-fit:cover;">
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
+    {% else %}
+        <p style="color:#666;">No recent donations yet. Check back soon!</p>
+    {% endif %}
 </div>
 
 
@@ -101,8 +114,8 @@
         <li><strong>Donation Publishing:</strong> Donors publish available items.</li>
         <li><strong>Request:</strong> NGOs browse and request donations.</li>
         <li><strong>Approval:</strong> Donor approves and status becomes “Claimed”.</li>
-        <li><strong>Collection:</strong> Pickup is arranged, then marked “Collected”.</li>
     </ol>
+    <ul><li><strong>Expiry:</strong> If the product is not requested before the expiry date, the product will not be available for donation.</li></ul>
 </div>
 
 {% endblock %}

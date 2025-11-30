@@ -1,24 +1,65 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<section class="section-white form-wrapper" style="max-width:720px; margin: 1.5rem auto;">
-  <h2>Edit NGO Profile</h2>
-  <form method="post">
-    {% csrf_token %}
-    <fieldset>
-      <legend>Account</legend>
-      {{ user_form.as_p }}
-    </fieldset>
 
-    <fieldset>
-      <legend>NGO Details</legend>
-      {{ profile_form.as_p }}
-    </fieldset>
+<div style="display: flex; justify-content: center; align-items: flex-start; min-height: 70vh; padding-top: 2rem;">
+    <div style="width: 100%; max-width: 720px; padding: 2rem; background-color: var(--cream); border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; color: var(--dark-green); margin-bottom: 1.5rem;">Edit NGO Profile</h2>
 
-    <div style="margin-top:1rem;">
-      <button type="submit" class="btn btn-success">Save Changes</button>
-      <a href="{% url 'ngo_account' %}" class="btn btn-warning" style="margin-left:8px;">Cancel</a>
+        <form method="post">
+            {% csrf_token %}
+
+            <fieldset style="border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                <legend style="font-weight: bold; color: var(--medium-green); padding: 0 0.5rem;">Account</legend>
+                {{ user_form.as_p }}
+            </fieldset>
+
+            <fieldset style="border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                <legend style="font-weight: bold; color: var(--medium-green); padding: 0 0.5rem;">NGO Details</legend>
+                {{ profile_form.as_p }}
+            </fieldset>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-success" style="width: 48%; margin-right: 2%;">Save Changes</button>
+                <a href="{% url 'ngo_account' %}" class="btn btn-warning" style="width: 48%;">Cancel</a>
+            </div>
+        </form>
     </div>
-  </form>
-</section>
+</div>
+
+<style>
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        font-family: inherit;
+        background-color: white;
+        margin-bottom: 0.8rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.3rem;
+        font-weight: bold;
+        color: var(--dark-green);
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    fieldset legend {
+        font-size: 1.1rem;
+    }
+</style>
+
 {% endblock %}
+

@@ -61,35 +61,19 @@ def homepage(request):
     # --- FOR TESTING ---
     # We can't get real donations yet (Poshita/Vedna's task).
     # So, we will use a "dummy" list to build your template.
-    recent_donations = [
-        {'title': 'Sample Donation 1', 'description': 'Test desc', 'category': 'Food', 'quantity': 10, 'location': 'Here'},
-        {'title': 'Sample Donation 2', 'description': 'Test desc', 'category': 'Clothing', 'quantity': 5, 'location': 'There'},
-        {'title': 'Sample Donation 3', 'description': 'Test desc', 'category': 'Other', 'quantity': 2, 'location': 'Anywhere'},
-    ]
+    recent_donations = (
+        Donation.objects
+        .filter(status='claimed')            # show only available (not expired/claimed)
+        .order_by('-date_created')[:4]         # latest 4
+    )
 
     context = {
         'recent_donations': recent_donations
     }
     return render(request, 'homepage.html', context)
 
-def about(request):
-    donation_count = Donation.objects.count()
-    total_quantity = Donation.objects.aggregate(Sum('quantity'))['quantity__sum'] or 0
-
-    return render(request, 'about.html', {
-        'donation_count': donation_count,
-        'total_quantity': total_quantity,
-    })
 
 
 
 
 
-
-
-"""@login_required
-def delete_donation(request, donation_id):
-    donation = get_object_or_404(Donation, id=donation_id, donor=request.user)
-    donation.delete()
-    messages.success(request, "Donation deleted!")
-    return redirect('donor_profile')"""
