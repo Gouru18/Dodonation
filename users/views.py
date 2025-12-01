@@ -58,9 +58,6 @@ def select_role_view(request):
 
 def homepage(request):
 
-    # --- FOR TESTING ---
-    # We can't get real donations yet (Poshita/Vedna's task).
-    # So, we will use a "dummy" list to build your template.
     recent_donations = (
         Donation.objects
         .filter(status='claimed')            # show only available (not expired/claimed)
