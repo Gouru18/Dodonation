@@ -54,7 +54,7 @@ def leave_review(request):
     reviews = GeneralReview.objects.order_by('-created_at')
     return render(request, 'core/leave_review.html', {'form': form, 'reviews': reviews})
 
-login_required_home
+@login_required_home
 def leave_report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST)
