@@ -1,30 +1,58 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<h2>Donations</h2>
-<form class="form-container" method="get">
-  <input type="text" name="q" placeholder="Search donations or donor" value="{{ query }}">
-  <select name="category">
-    <option value="">All Categories</option>
-    <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
-    <option value="clothes" {% if category == 'clothes' %}selected{% endif %}>Clothes</option>
-    <option value="others" {% if category == 'others' %}selected{% endif %}>Others</option>
-  </select>
-  <button type="submit">Filter</button>
-</form>
+<div class="main-content-wrapper">
+    <h2>Donations</h2>
+    <p style="margin-top:4px; margin-bottom:18px; color:#325827; font-size:0.98rem;">
+        Together, we can build a stronger, more caring community - one donation at a time
+    </p>
 
-{% for donation in donations %}
-  <div class="donation-card">
-    <h3>{{ donation.title }}</h3>
-    <p>Category: {{ donation.get_category_display }}</p>
-    <p>Status: {{ donation.get_status_display }}</p>
-    <p>{{ donation.description }}</p>
-    <p>Quantity: {{ donation.quantity }}</p>
-    <p>Location: {{ donation.location }}</p>
-    <p>Expiry Date: {{ donation.expiry_date }}</p>
-    <p>Date Posted: {{ donation.date_created }}</p>
-    <p>Donor: <a href="{% url 'donor_profile' donation.user.id %}">{{ donation.donor.username }}</a></p>
-  </div>
-{% empty %}
-  <div class="form-container"><p>No donations found.</p></div>
-{% endfor %}
+    <form method="get" class="form-container" style="margin-bottom:32px;">
+        <input type="text" name="q" placeholder="Search donations or donor" value="{{ query }}">
+        <select name="category">
+            <option value="">All Categories</option>
+            <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
+            <option value="clothes" {% if category == 'clothes' %}selected{% endif %}>Clothes</option>
+            <option value="others" {% if category == 'others' %}selected{% endif %}>Others</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    {% for donation in donations %}
+        <div class="donation-card">
+            <h3>{{ donation.title }}</h3>
+            <p>{{ donation.description }}</p>
+            <p>
+                <strong>Category:</strong> {{ donation.get_category_display }}
+                | <strong>Status:</strong> {{ donation.get_status_display }}
+            </p>
+            <p>
+                <strong>Quantity:</strong> {{ donation.quantity }}
+                | <strong>Location:</strong> {{ donation.location }}
+            </p>
+            <p>
+                <strong>Expiry Date:</strong> {{ donation.expiry_date }}
+                | <strong>Date Posted:</strong> {{ donation.date_created }}
+            </p>
+            <p>
+                <strong>Donor:</strong>
+                <a href="{% url 'donor_public_profile' donation.donor.id %}">{{ donation.donor.username }}</a>
+            </p>
+
+            {% if donation.status == "available" %}
+                {% if user.is_authenticated and user.profile.role == "ngo" %}
+                    <form method="post" action="{% url 'request_donation' donation.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Request donation</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <p style="color:#aa3333; font-weight:600;">Item already claimed</p>
+            {% endif %}
+        </div>
+    {% empty %}
+        <div class="donation-card">
+            <p>No donations found.</p>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}
