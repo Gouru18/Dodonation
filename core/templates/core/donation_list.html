@@ -1,11 +1,17 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 style="text-align:center; color: var(--dark-green); margin-bottom: 2rem;">Donations</h2>
+<h2 style="text-align:center; color: var(--dark-green); margin-bottom: 0.4rem;">
+    Donations
+</h2>
+<p style="text-align:center; color:#325827; margin-bottom: 1.8rem; font-size:0.98rem;">
+    Together, we can build a stronger, more caring community - one donation at a time
+</p>
 
-<form class="form-container" method="get" style="max-width: 800px; margin: 0 auto 2rem auto; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-  <input type="text" name="q" placeholder="Search donations or donor" value="{{ query }}" style="flex: 1; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+<form class="form-container" method="get" style="max-width: 800px; margin: 0 auto 2rem auto;
+display: flex; gap: 0.5rem; flex-wrap: wrap;">
+  <input type="text" name="q" placeholder="Search donations or donor" value="{{ query }}"
+         style="flex: 1; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
   <select name="category" style="padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
     <option value="">All Categories</option>
     <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
@@ -25,10 +31,12 @@
 
 <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 900px; margin: 0 auto;">
 {% for donation in donations %}
-  <div class="donation-card" style="display: flex; gap: 1rem; background-color: #fdf6e3; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); overflow: hidden;">
+  <div class="donation-card" style="display: flex; gap: 1rem; background-color: #fdf6e3;
+  border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); overflow: hidden;">
     {% if donation.image %}
     <div style="flex: 0 0 300px; max-height: 300px; overflow: hidden;">
-      <img src="{{ donation.image.url }}" alt="{{ donation.title }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 7%;">
+      <img src="{{ donation.image.url }}" alt="{{ donation.title }}" style="width: 100%; height: 100%;
+      object-fit: cover; border-radius: 7%;">
     </div>
     {% endif %}
 
@@ -48,17 +56,25 @@
       </p>
 
       {% if request.user.is_authenticated and request.user.role == 'ngo' %}
-          {% if donation.status != 'expired' %}
+          {% if donation.status == 'claimed' %}
+              <p style="margin-top:1rem; color:#b23b3b; font-weight:bold;">
+                  Item already claimed.
+              </p>
+          {% elif donation.status == 'expired' %}
+              <p style="margin-top:1rem; color:#b23b3b; font-weight:bold;">
+                  This donation has expired and cannot be requested.
+              </p>
+          {% else %}
               <form method="post" style="margin-top: 1rem;">
                 {% csrf_token %}
                 <input type="hidden" name="donation_id" value="{{ donation.id }}">
                 <button type="submit" class="btn btn-success">Request Donation</button>
               </form>
-          {% else %}
-              <p style="margin-top:1rem; color:#b23b3b; font-weight:bold;">This donation has expired and cannot be requested.</p>
           {% endif %}
       {% elif not request.user.is_authenticated %}
-          <p style="margin-top:1rem; color:#666;">Login as an NGO to request this donation.</p>
+          <p style="margin-top:1rem; color:#666;">
+              Login as an NGO to request this donation.
+          </p>
       {% endif %}
     </div>
   </div>
