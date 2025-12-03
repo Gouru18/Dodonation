@@ -34,11 +34,11 @@ class UserSignupForm(forms.ModelForm):
             raise ValidationError("An account with this email already exists.")
         return email
 
-    def clean_phone_no(self):
-        phone = self.cleaned_data.get('phone_no')
-        if not re.fullmatch(r'\d{8}', phone):  # exactly 8 digits
-            raise forms.ValidationError("Enter a valid 8-digit phone number.")
-        return phone
+    # def clean_phone_no(self):
+    #     phone = self.cleaned_data.get('phone_no')
+    #     if not re.fullmatch(r'\d{8}', phone):  # exactly 8 digits
+    #         raise forms.ValidationError("Enter a valid 8-digit phone number.")
+    #     return phone
 
 # Login Form
 class LoginForm(AuthenticationForm):
