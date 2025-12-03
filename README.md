@@ -5,4 +5,4 @@ Krishna Rungasamy (2413950): modularized the project, ngo pages, ngo_list, about
 Poshita Beersee (2413580): donation posts page + donorprofile page, designed website layerout, powerpoint merged demo videos.
 Gouruchana Devi Maghoo (2413925): project creation, admin panel, bootstrap buttons, powerpoint and functional requirements table.
 
-Note:Use Chrome to open the website.
+Note:Use Chrome (not Icognito) to open the website.
